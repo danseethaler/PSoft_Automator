@@ -38,35 +38,37 @@ chrome.runtime.onMessage.addListener (
 			return;
         };
 
-		// Set the evironment and system variables
-		switch (window.location.host.substring(0,window.location.host.indexOf("."))){
-			case "hrcore91":
-	            localStorage.environment = "prod";
-	            localStorage.system = "core";
-				break;
-
-			case "hrcore91-sg-stage":
-	            localStorage.environment = "stage";
-	            localStorage.system = "core";
-				break;
-
-			case "hradmin91":
-	            localStorage.system = "admin";
-	            localStorage.environment = "prod";
-				break;
-
-			case "hradmin91-sg-stage":
-	            localStorage.system = "admin";
-	            localStorage.environment = "stage";
-				break;
-
-			default:
-	            localStorage.system = undefined;
-	            localStorage.environment = undefined;
-		}
 
 		 // Return the environment variable if requested
 	  	if (request.scriptAction === "getSystem") {
+
+    		// Set the evironment and system variables
+    		switch (window.location.host.substring(0,window.location.host.indexOf("."))){
+    			case "hrcore91":
+    	            localStorage.environment = "prod";
+    	            localStorage.system = "core";
+    				break;
+
+    			case "hrcore91-sg-stage":
+    	            localStorage.environment = "stage";
+    	            localStorage.system = "core";
+    				break;
+
+    			case "hradmin91":
+    	            localStorage.system = "admin";
+    	            localStorage.environment = "prod";
+    				break;
+
+    			case "hradmin91-sg-stage":
+    	            localStorage.system = "admin";
+    	            localStorage.environment = "stage";
+    				break;
+
+    			default:
+    	            localStorage.system = undefined;
+    	            localStorage.environment = undefined;
+    		}
+
 	  		sendResponse({system: localStorage.system});
 	  		return;
 	  	};

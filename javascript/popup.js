@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 "openModifyAPerson",
                 "openUpdateEmployeeTaxData",
                 "openUpdatePayrollOptions",
-                "toggleTerminateGroup"
+                "toggleTerminateGroup",
+                "toggleRefreshJobData"
             ];
 
             for (var i = hideIDs.length - 1; i >= 0; i--) {
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // document.querySelector('#additionalPayList').addEventListener('change', convertString, false);
         document.querySelector('#retrosList').addEventListener('change', convertString, false);
         document.querySelector('#terminationList').addEventListener('change', convertString, false);
+        document.querySelector('#refreshList').addEventListener('change', convertString, false);
 
         document.querySelector("#generateCheck").addEventListener("click", generateCheck, false);
         document.querySelector("#generateCheck").addEventListener("contextmenu", generateCheck, false);
@@ -72,6 +74,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector("#generateRetros").addEventListener("contextmenu", generateRetros, false);
         document.querySelector("#terminateEmployees").addEventListener("click", terminateEmployees, false);
         document.querySelector("#terminateEmployees").addEventListener("contextmenu", terminateEmployees, false);
+        document.querySelector("#refreshEmployees").addEventListener("click", refreshEmployees, false);
+        document.querySelector("#refreshEmployees").addEventListener("contextmenu", refreshEmployees, false);
         // document.querySelector("#createAdditionalPay").addEventListener("click", generateAdditionalPay, false);
 
         var mySquares = document.getElementsByClassName('square');
@@ -234,6 +238,35 @@ function terminateEmployees (e) {
         "scriptAction": e.target.id,
         "componentName": "Add/Update Job",
         "terminationList": localStorage.terminationList
+    };
+
+    // Set the pageStay based on the contextMenu or click event
+    if (e.type === "contextmenu") {
+        e.preventDefault();
+    }else if (e.type === "click") {
+        requestObject.pageStay = true;
+    }
+
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
+      });
+    });
+
+    window.close();
+}
+
+function refreshEmployees (e) {
+
+    if (localStorage.refreshList === undefined) {
+        // TODO: Add quick message function to explain why a function doesn't continue
+        console.log("localStorage.retrosList is undefined : ", localStorage.refreshList)
+        return false;
+    };
+
+    var requestObject = {
+        "scriptAction": e.target.id,
+        "componentName": "Add/Update Job",
+        "refreshList": localStorage.refreshList
     };
 
     // Set the pageStay based on the contextMenu or click event
@@ -418,6 +451,9 @@ function convertString(e){
     }else if (valueListID === "retrosList") {
         excelToJSONRetros(pastedString, valueListID);
 
+    }else if (valueListID === "refreshList") {
+        excelToJSONRefresh(pastedString, valueListID);
+
     }else if (valueListID === "terminationList") {
         excelToJSONTerminations(pastedString, valueListID);
     };
@@ -472,6 +508,59 @@ function excelToJSONTerminations(pastedString, valueListID){
 
     // Set local storage of triggerDate
     localStorage.terminationList = textToJSON;
+
+    JSONToTable(JSON.parse(textToJSON), valueListID);
+}
+
+function excelToJSONRefresh(pastedString, valueListID){
+
+    var pastedStringArray = pastedString.split(/[\n\r\t]/g);
+
+    var textToJSON = '[';
+
+    for (var i = 0; i < pastedStringArray.length; i++) {
+        // stepCount should be the remainder when devided by the number of data points for each employee
+        var stepCount = i%5;
+
+        // Check to see if value is missing on last employee values
+        // stepCount should be one less than the data points
+        // if were on the last element in the array
+        if (stepCount !== 4 && i === pastedStringArray.length) {
+            console.log("Missing values on end of array.");
+            return false;
+        }
+
+        // If this is the first item in the string (empID)
+        if (stepCount === 0) {
+            // Make sure the EmpID contains 6 or 9 digits
+            if (/^\d+$/.test(pastedStringArray[i]) && (pastedStringArray[i].length == 6 || pastedStringArray[i].length == 9)) {
+                textToJSON += '{"empid":"' + pastedStringArray[i] + '",';
+
+            }else {
+                console.log("EmpID " + pastedStringArray[i] + " is not in a valid format. Iteration #" + i);
+                return false;
+            }
+
+        }else if (stepCount === 1) {// emplRcd
+            textToJSON += '"emplRcd":"' + pastedStringArray[i] + '",';
+        }else if (stepCount === 2) {// termDate
+            textToJSON += '"effectiveDate":"' + pastedStringArray[i] + '",';
+        }else if (stepCount === 3) {// reason
+            textToJSON += '"reason":"' + pastedStringArray[i] + '",'
+        }else if (stepCount === 4) {// reason
+            textToJSON += '"positionNum":"' + pastedStringArray[i] + '"}'
+
+            // If this is the last element in the array add a square bracket, otherwise add a comma
+            if ((i + 1) === pastedStringArray.length) {
+                textToJSON += ']'
+            }else {
+                textToJSON += ','
+            }
+        }
+    }
+
+    // Set local storage of triggerDate
+    localStorage.refreshList = textToJSON;
 
     JSONToTable(JSON.parse(textToJSON), valueListID);
 }

@@ -61,6 +61,13 @@
         <button class="scriptButton" id="terminateEmployees">Terminate Employees</button>
     </div>
 
+    <button class="nav" id="toggleRefreshJobData" title="refreshJobDataGroup">Refresh Employee Data</button>
+
+    <div id="refreshJobDataGroup" class="collapsible">
+        <textarea id="refreshList" placeholder="Paste data for employees to refresh position data. Format is (EmpID, EmplRcd, Effective Date, Reason - Action is always POS)"></textarea>
+        <button class="scriptButton" id="refreshEmployees">Refresh Employee Data</button>
+    </div>
+
 <div id="squaresContainer">
     <!-- Queries -->
     <button class="square gn" id="openQueryManager">QM</button>

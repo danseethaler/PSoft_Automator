@@ -354,6 +354,12 @@ function searchPage() {
         return;
     }
 
+    if (localStorage.scriptAction === "refreshEmployees") {
+    	console.log("Calling refreshEmployees from searchPage function.")
+        searchRefreshEmployees();
+        return;
+    }
+
     // Set the Run Control ID parameter to "contains" if action is openUploadProcess
     if (localStorage.scriptAction === "openUploadProcess") {
     	document.getElementById("ptifrmtgtframe").contentDocument.getElementById("C_TL_RUNCNTL_RUN_CNTL_ID$op").value = "8";
@@ -696,6 +702,169 @@ function openSections () {
         }
 
     },500);
+}
+
+// Refresh Employees
+function searchRefreshEmployees () {
+    // This function parses and updates the refreshList from local storage and searches the page
+    // with the empID from the next available termination
+    if (localStorage.refreshList === undefined) {
+        return false;
+    }
+
+    // If we're done processing then display a message once the search page appears
+    if (localStorage.refreshList.length < 3) {
+
+        // Remove the scriptAction from localStorage
+        localStorage.removeItem("scriptAction");
+
+        if (!!document.getElementById("ptifrmtgtframe")) {
+
+            var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+            if (!!psIframe.getElementById("EMPLMT_SRCH_COR_EMPLID")) {
+
+                console.log("Refrehes processed. Displaying quickMessage");
+
+                quickMessage("Refreshes processing complete.");
+
+                return;
+            }
+        }
+    }
+
+    // Set the iframe variable
+    var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+    // Get the refreshList string from localStorage and convert it to an object
+    var newRefreshList = JSON.parse(localStorage.refreshList)
+
+    // Remove the first element of the object for this iteration
+    localStorage.thisRefresh = JSON.stringify(newRefreshList.shift());
+
+    // Update the localStorage.refreshList with the stringified version of the newRefreshList
+    localStorage.refreshList = JSON.stringify(newRefreshList);
+
+    // Enter the ID number, EmplRcd and click search
+    psIframe.getElementById("EMPLMT_SRCH_COR_EMPLID").value = JSON.parse(localStorage.thisRefresh).empid;
+    psIframe.getElementById("EMPLMT_SRCH_COR_EMPL_RCD").value = JSON.parse(localStorage.thisRefresh).emplRcd;
+    psIframe.getElementById("#ICSearch").click();
+
+    console.log("Calling addNewRowRefresh");
+    addNewRowRefresh();
+}
+
+function addNewRowRefresh () {
+    var waitForJobData = setInterval(function() {
+
+        var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+        // Check to see if the search did not return any search results
+        if (!!psIframe.getElementsByClassName("PSSRCHINSTRUCTIONS")[0] && psIframe.getElementsByClassName("PSSRCHINSTRUCTIONS")[0].innerHTML === "No matching values were found.") {
+
+            clearInterval(waitForJobData);
+            console.log("Employee not found.")
+            return;
+        }
+
+        // Make sure the plus button exists and click it
+        if (!!psIframe.getElementById("$ICField12$new$0$$0")) {
+            clearInterval(waitForJobData);
+
+            setTimeout(function(){
+                psIframe.getElementById("$ICField12$new$0$$0").click();
+
+                console.log("calling addRefreshValues")
+                addRefreshValues();
+            },200)
+        }
+    },300)
+}
+
+function addRefreshValues () {
+
+    var waitForJobDataRow = setInterval(function(){
+
+        // Set the iframe variable
+        var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+        // If we're on the new job data row
+        if (psIframe.getElementsByClassName("PSGRIDCOUNTER")[0].innerHTML === "1 of 2") {
+
+            clearInterval(waitForJobDataRow);
+
+            // Initialize force change event
+            var changeEvent = document.createEvent("HTMLEvents");
+            changeEvent.initEvent("change", true, true);
+
+            // Set the date
+            psIframe.getElementById("JOB_EFFDT$0").value = JSON.parse(localStorage.thisRefresh).effectiveDate;
+            psIframe.getElementById("JOB_EFFDT$0").dispatchEvent(changeEvent);
+
+            // Set action
+            psIframe.getElementById("JOB_ACTION$0").value = "POS";
+            psIframe.getElementById("JOB_ACTION$0").dispatchEvent(changeEvent);
+
+            var waitForAction = setInterval(function(){
+                if (psIframe.getElementById("WAIT_win0").style.display === "none") {
+                    clearInterval(waitForAction)
+
+                    // Set the Job Action Reason
+                    psIframe.getElementById("JOB_ACTION_REASON$0").value = JSON.parse(localStorage.thisRefresh).reason;
+                    psIframe.getElementById("JOB_ACTION_REASON$0").dispatchEvent(changeEvent);
+
+                    console.log("Calling refreshPosition");
+
+                    // Call setRehireData function
+                    refreshPosition();
+                }
+            },200)
+        }
+    },300)
+}
+
+function refreshPosition() {
+
+    // Set the iframe variable
+    var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+	psIframe.getElementById("JOB_POSITION_NBR$prompt$0").click();
+
+    var waitForModal = setInterval(function(){
+
+        if (!!document.getElementById("ptModFrame_0")) {
+
+            // Stop the interval
+            clearInterval(waitForModal);
+
+            var modal = document.getElementById("ptModFrame_0").contentDocument;
+
+            var waitForPosition = setInterval(function(){
+
+                console.log("Checking for position number field");
+                var modal = document.getElementById("ptModFrame_0").contentDocument;
+
+                if (!!modal.getElementById("POSN_DATA_VW_POSITION_NBR")) {
+                    clearInterval(waitForPosition);
+                    // Enter the position number
+                	modal.getElementById("POSN_DATA_VW_POSITION_NBR").value = JSON.parse(localStorage.thisRefresh).positionNum;
+
+                    // Search for the position
+                    modal.getElementById("#ICSearch").click();
+
+                    // Select the first search result
+                    modal.getElementById("SEARCH_RESULT1").click();
+
+                    // Select the first search result
+                    psIframe.getElementById("#ICSave").click();
+
+                    startMutationWatchingIframe();
+                    startMutationWatchingBody();
+
+                }
+            },300)
+        }
+    })
 }
 
 // Terminate Employees
@@ -1201,6 +1370,12 @@ function createSearchCriteriaObj() {
             "moreThanSearch": "true"
         },
         "terminateEmployees": {
+            "searchFieldID": "EMPLMT_SRCH_COR_EMPLID",
+            "searchValue": "temp",
+            "searchButtonID": "#ICSearch",
+            "moreThanSearch": "true"
+        },
+        "refreshEmployees": {
             "searchFieldID": "EMPLMT_SRCH_COR_EMPLID",
             "searchValue": "temp",
             "searchButtonID": "#ICSearch",

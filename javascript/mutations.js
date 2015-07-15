@@ -166,6 +166,88 @@ function iframeObserver_terminateEmployees (mutations, iframeObserver) {
     }
 }
 
+function bodyObserver_refreshEmployees (mutations, bodyObserver) {
+
+    if (localStorage.scriptAction === undefined || !!document.getElementById("ptifrmtgtframe").contentDocument.getElementById("EMPLMT_SRCH_COR_EMPLID")) {
+        bodyObserver.disconnect();
+        return false;
+    }
+
+    // Iterate through each mutation node
+    for (var i = 0; i < mutations.length; i++) {
+
+        // Check for modal popup
+        if (mutations[i].target.id.substring(0,6) === "ptMod_") {
+
+            // Click through message
+            if (checkIframeAndClass("popupText","<br>Note: The corresponding Church Service Call in",false)) {
+                console.log("Clicked OK on corresponding Church Service warning");
+                document.getElementById("#ICOK").click();
+            }
+
+            // Click through message
+            if (checkIframeAndClass("popupText","<br>Non-Employees must be in a PayGroup starting w",false)) {
+                console.log("Clicked OK on PayGroup warning");
+                document.getElementById("#ICOK").click();
+            }
+
+            // Click through message
+            if (checkIframeAndClass("popupText","<br>Warning -- Head count of 2 exceeds maximum hea",false)) {
+                console.log("Clicked OK on Head Count warning");
+                document.getElementById("#ICOK").click();
+
+            }else{
+
+                if (!!document.getElementsByClassName("popupText")[1]) {
+                   // Log the message
+                    console.log("Unidentified error : ", document.getElementsByClassName("popupText")[1].innerHTML);
+                }
+            }
+        }
+    }
+}
+
+function iframeObserver_refreshEmployees (mutations, iframeObserver) {
+    // Loop through all the changes
+    for (var i = 0; i < mutations.length; i++) {
+
+        // Check if there's a change for the SAVED_win0
+        if (mutations[i].target.id === "SAVED_win0"){
+
+            // Set the iframe variable
+            var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+            // If the style of the SAVED_win0 === block --> the page has been saved
+            if (psIframe.getElementById("SAVED_win0").style.display === "block" && psIframe.getElementById("ptStatusText_win0").innerHTML === "Saved") {
+
+                // Disconnect the iframeObserver
+                iframeObserver.disconnect();
+
+                // Return to search
+                document.getElementById("pthnavbccrefanc_HC_JOB_DATA_GBL").click();
+
+
+                // If the search field shows up and this code is still running the link didn't initiate a page reload
+                var lookingForSearchNode = setInterval(function(){
+
+                    // Set the iframe variable
+                    var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+                    if (!!psIframe.getElementById("EMPLMT_SRCH_COR_EMPLID")) {
+                        console.log("Called pageReady manually");
+
+                        clearInterval(lookingForSearchNode);
+
+                        // Call pageReady()
+                        pageReady();
+                    };
+                },700);
+                return;
+            }
+        }
+    }
+}
+
 function bodyObserver_openJobData(mutations, bodyObserver){
     console.log("fired bodyObserver_openJobData");
     if (localStorage.scriptAction === undefined) {
