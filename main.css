@@ -144,7 +144,7 @@ form{
 div.collapsible{
   display: none;
   width: 215px;
-  overflow: scroll;
+  overflow: auto;
 }
 
 form {
