@@ -846,21 +846,36 @@ function refreshPosition() {
 
                 if (!!modal.getElementById("POSN_DATA_VW_POSITION_NBR")) {
                     clearInterval(waitForPosition);
+
                     // Enter the position number
                 	modal.getElementById("POSN_DATA_VW_POSITION_NBR").value = JSON.parse(localStorage.thisRefresh).positionNum;
 
                     // Search for the position
                     modal.getElementById("#ICSearch").click();
 
-                    // Select the first search result
-                    modal.getElementById("SEARCH_RESULT1").click();
+                    var waitForSearch = setInterval(function(){
 
-                    // Select the first search result
-                    psIframe.getElementById("#ICSave").click();
+                        if (!modal.getElementById("RESULT0$1")) {
 
-                    startMutationWatchingIframe();
-                    startMutationWatchingBody();
+                            clearInterval(waitForSearch);
 
+                            setTimeout(function(){
+
+                                // Select the first search result
+                                modal.getElementById("SEARCH_RESULT1").click();
+
+                                setTimeout(function(){
+                                    // Select the first search result
+                                    psIframe.getElementById("#ICSave").click();
+
+                                    startMutationWatchingIframe();
+                                    startMutationWatchingBody();
+
+                                },500)
+
+                            },500)
+                        }
+                    })
                 }
             },300)
         }
