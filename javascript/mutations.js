@@ -189,11 +189,13 @@ function bodyObserver_refreshEmployees (mutations, bodyObserver) {
             if (checkIframeAndClass("popupText","<br>Warning -- Head count of 2 exceeds maximum hea",false)) {
                 console.log("Clicked OK on Head Count warning");
                 document.getElementById("#ICOK").click();
+            }
 
             // Click through message
             if (checkIframeAndClass("popupText","<br>Warning -- Combined FTE of active jobs for emp",false)) {
                 console.log("Clicked OK on Combined FTE warning");
                 document.getElementById("#ICOK").click();
+            }
 
             // Click through message
             if (checkIframeAndClass("popupText","<br>Warning -- Benefit System not unique for curre",false)) {
