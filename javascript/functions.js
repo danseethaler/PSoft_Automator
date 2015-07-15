@@ -530,7 +530,7 @@ function setTrigger () {
                 psIframe.getElementById("#ICSave").click()
 
                 console.log("Calling waitForSave()")
-                waitForSave("pthnavbccrefanc_C_TL_TR_STATUS_CMP_GBL", "C_TL_TR_STAT_VW_EMPLID");
+                waitForSave("pthnavbccrefanc_C_TL_TR_STATUS_CMP_GBL", "C_TL_TR_STAT_VW_EMPLID", true);
 
             // Otheriwise check the box -> saveAndReturn is called in the bodyObserver
             }else{
