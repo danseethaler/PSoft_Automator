@@ -1399,16 +1399,16 @@ var MutationSummary = (function () {
 
 function iframeMutations(summaries) {
     if (summaries[0].added.length > 0) {
-        console.log(summaries[0].added);
-        console.log(summaries[0].added.length);
+        // console.log(summaries[0].added);
+        // console.log(summaries[0].added.length);
         // summaries[0].added.forEach(nodeAddedIframe);
     }
 }
 
 function bodyMutations(summaries) {
     if (summaries[0].added.length > 0) {
-        console.log(summaries[0].added);
-        console.log(summaries[0].added.length);
+        // console.log(summaries[0].added);
+        // console.log(summaries[0].added.length);
         // summaries[0].added.forEach(nodeAddedBody);
     }
 }
