@@ -354,6 +354,12 @@ function searchPage() {
         return;
     }
 
+    if (localStorage.scriptAction === "updatePositions") {
+    	console.log("Calling searchPositionList from searchPage function.")
+        searchPositionList();
+        return;
+    }
+
     if (localStorage.scriptAction === "refreshEmployees") {
     	console.log("Calling refreshEmployees from searchPage function.")
         searchRefreshEmployees();
@@ -882,6 +888,186 @@ function refreshPosition() {
     })
 }
 
+// Update Position Data
+function searchPositionList() {
+    // This function parses and updated the positionList from local storage
+    // and searches the page with the next available position number.
+    if (localStorage.positionList === undefined) {
+        return false;
+    }
+
+    // If we're done processing then display a message once the search page appears
+    if (localStorage.positionList.length < 3) {
+
+        // Remove the scriptAction from localStorage
+        localStorage.removeItem("scriptAction");
+
+        // If the iFrame exists
+        if (!!document.getElementById("ptifrmtgtframe")) {
+
+            // Set the iframe variable
+            var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+            // Check to see if the search field exists
+            if (!!psIframe.getElementById("POSITION_SRCH_POSITION_NBR")) {
+
+                console.log("Position updates processed. Displaying quickMessage");
+
+                quickMessage("Position updates complete.");
+
+                return;
+            }
+        }
+    }
+
+    // Set the iframe variable
+    var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+    // Get the positionList string from localStorage and convert it to an object
+    var newPositionList = JSON.parse(localStorage.positionList)
+
+    // Remove the first element of the object for this iteration
+    localStorage.thisPosition = JSON.stringify(newPositionList.shift());
+
+    // Update the localStorage.positionList with the stringified version of the newPositionList
+    localStorage.positionList = JSON.stringify(newPositionList);
+
+    // Enter the ID number, EmplRcd and click search
+    psIframe.getElementById("POSITION_SRCH_POSITION_NBR").value = JSON.parse(localStorage.thisPosition).positionNumber;
+    psIframe.getElementById("#ICSearch").click();
+
+    console.log("Calling addNewPositionRow");
+    addNewPositionRow();
+
+}
+
+function addNewPositionRow () {
+    var waitForPositionData = setInterval(function() {
+
+        var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+        // Check to see if the search did not return any search results
+        if (!!psIframe.getElementsByClassName("PSSRCHINSTRUCTIONS")[0] && psIframe.getElementsByClassName("PSSRCHINSTRUCTIONS")[0].innerHTML === "No matching values were found.") {
+
+            clearInterval(waitForPositionData);
+            console.log("Position not found.")
+            return;
+        }
+
+        // Make sure the plus button exists and click it
+        if (!!psIframe.getElementById("$ICField3$new$0$$0")) {
+            clearInterval(waitForPositionData);
+
+            setTimeout(function(){
+                psIframe.getElementById("$ICField3$new$0$$0").click();
+
+                console.log("calling addPositionValues")
+                addPositionValues();
+            },200)
+        }
+    },300)
+}
+
+function addPositionValues () {
+
+    var waitForPositionDataRow = setInterval(function(){
+
+        // Set the iframe variable
+        var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+        // If we're on the new job data row
+        if (psIframe.getElementsByClassName("PSGRIDCOUNTER")[0].innerHTML === "1 of 2") {
+
+            clearInterval(waitForPositionDataRow);
+
+            // Initialize force change event
+            var changeEvent = document.createEvent("HTMLEvents");
+            changeEvent.initEvent("change", true, true);
+
+            // Set the date
+            psIframe.getElementById("POSITION_DATA_EFFDT$0").value = JSON.parse(localStorage.thisPosition).effectiveDate;
+            psIframe.getElementById("POSITION_DATA_EFFDT$0").dispatchEvent(changeEvent);
+
+            // Set action
+            psIframe.getElementById("POSITION_DATA_ACTION_REASON$0").value = JSON.parse(localStorage.thisPosition).reasonCode;
+            psIframe.getElementById("POSITION_DATA_ACTION_REASON$0").dispatchEvent(changeEvent);
+
+            var waitForAction = setInterval(function(){
+                if (psIframe.getElementById("WAIT_win0").style.display === "none") {
+                    clearInterval(waitForAction)
+
+                    // Call updateDataPoint function
+                    console.log("Calling updateDataPoint function");
+                    updateDataPoint();
+                }
+            },200)
+        }
+    },300)
+}
+
+function updateDataPoint() {
+
+    // Initialize force change event
+    var changeEvent = document.createEvent("HTMLEvents");
+    changeEvent.initEvent("change", true, true);
+
+    // Setup local variables
+    var reasonCode = JSON.parse(localStorage.thisPosition).reasonCode;
+    var dataPoint = JSON.parse(localStorage.thisPosition).dataPoint;
+
+    // Set the iframe variable
+    var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+    if (reasonCode === "UPD") {
+
+    }
+
+    if (reasonCode === "XFR") {
+
+    }
+
+    if (reasonCode === "HRC") {
+
+        psIframe.getElementById('POSITION_DATA_STD_HOURS$0').value = dataPoint;
+        psIframe.getElementById("POSITION_DATA_STD_HOURS$0").dispatchEvent(changeEvent);
+
+        // Navigate to the LDS-Position Data tab
+        psIframe.querySelector("[name='#ICPanel2']").click()
+
+        var waitForPage = setInterval(function(){
+            if (!!psIframe.getElementById('POSITION_DATA_C_APPROVED_HRS$0')) {
+
+                clearInterval(waitForPage);
+
+                // Set the approved hours field
+                psIframe.getElementById('POSITION_DATA_C_APPROVED_HRS$0').value = dataPoint;
+                psIframe.getElementById("POSITION_DATA_C_APPROVED_HRS$0").dispatchEvent(changeEvent);
+
+                // Set the standard hours field
+                psIframe.getElementById('POSITION_DATA_STD_HOURS$0').value = dataPoint;
+                psIframe.getElementById("POSITION_DATA_STD_HOURS$0").dispatchEvent(changeEvent);
+
+                // Click save
+                psIframe.getElementById("#ICSave").click();
+
+                startMutationWatchingIframe();
+                startMutationWatchingBody();
+
+            }
+        },500);
+
+    }
+
+    if (reasonCode === "LOC") {
+
+    }
+
+    if (reasonCode === "TTL") {
+
+    }
+
+}
+
 // Terminate Employees
 function searchTerminateEmployees () {
     // This function parses and updates the terminationList from local storage and searches the page
@@ -1392,6 +1578,12 @@ function createSearchCriteriaObj() {
         },
         "refreshEmployees": {
             "searchFieldID": "EMPLMT_SRCH_COR_EMPLID",
+            "searchValue": "temp",
+            "searchButtonID": "#ICSearch",
+            "moreThanSearch": "true"
+        },
+        "updatePositions": {
+            "searchFieldID": "POSITION_SRCH_POSITION_NBR",
             "searchValue": "temp",
             "searchButtonID": "#ICSearch",
             "moreThanSearch": "true"

@@ -296,6 +296,7 @@ function updatePositions (e) {
     var requestObject = {
         "scriptAction": e.target.id,
         "componentName": "Add/Update Position",
+        // localStorage.positionList comes from the positionList change event handler
         "positionList": localStorage.positionList
     };
 
