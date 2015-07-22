@@ -213,6 +213,12 @@ function sendAction(e){
             if (!!getEmpidFromClipboard("taskgroup")) {
                 requestObject.taskgroup = getEmpidFromClipboard("taskgroup");
             }
+
+        }else if (e.target.id === "openAddUpdatePosition") {
+            if (!!getEmpidFromClipboard("position")) {
+                requestObject.positionNumber = getEmpidFromClipboard("position");
+            }
+
         }else if (!!getEmpidFromClipboard("empid")) {
             requestObject.empid = getEmpidFromClipboard("empid");
         }
@@ -902,6 +908,13 @@ function getEmpidFromClipboard(cbValue){
 
     }else if (cbValue ==="taskgroup") {
         if (/^\d+$/.test(clipboardData) && (clipboardData.length === 7)) {
+            return clipboardData;
+        }else {
+            return false;
+        }
+
+    }else if (cbValue ==="position") {
+        if (/^\d+$/.test(clipboardData) && (clipboardData.length === 8)) {
             return clipboardData;
         }else {
             return false;

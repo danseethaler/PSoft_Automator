@@ -1699,6 +1699,11 @@ function createSearchCriteriaObj() {
             "searchValue": localStorage.taskgroup,
             "searchButtonID": "#ICSearch"
         },
+        "openAddUpdatePosition": {
+            "searchFieldID": "POSITION_SRCH_POSITION_NBR",
+            "searchValue": localStorage.positionNumber,
+            "searchButtonID": "#ICSearch"
+        },
         "openTimeUnion": {
             "searchFieldID": "QRYSELECT_WRK_QRYSEARCHTEXT254",
             "searchValue": "Click",
