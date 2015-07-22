@@ -110,6 +110,11 @@ function bodyObserver_terminateEmployees (mutations, bodyObserver) {
                 document.getElementById("#ICOK").click();
 
             // Click through message
+            }else if (checkIframeAndClass("popupText","<br>Warning -- date out of range. (15,9) <br><br>T",false)) {
+                console.log("Clicked OK on Date Out of Range warning");
+                document.getElementById("#ICOK").click();
+
+            // Click through message
             }else if (checkIframeAndClass("popupText","<br>Warning -- Probation Date must be later than H",false)) {
                 console.log("Clicked OK on Probation Date must be later than Hire date warning");
                 document.getElementById("#ICOK").click();

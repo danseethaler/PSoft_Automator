@@ -15,9 +15,14 @@ function myMutationFunction(summaries) {
 function nodeAdded(newNode){
     if (!!newNode.id) {
 
-        if (newNode.id === "pthnavbccref_C_RUNCTL_CPAY955A_GBL_1" && localStorage.nextAction === "runReport") {
-            document.getElementById("ptifrmtgtframe").contentDocument.getElementById("RUN_CNTL_USER_ASOFDATE").value = "071715";
-            document.getElementById("ptifrmtgtframe").contentDocument.getElementById("PRCSRQSTDLG_WRK_LOADPRCSRQSTDLGPB").click();
+        if (newNode.id === "ptabnsp_pthnavbccref_C_RUNCTL_CPAY908B_USA" && localStorage.nextAction === "runReport") {
+            document.getElementById("ptifrmtgtframe").contentDocument.getElementById("RUN_CNTL_USER_RUN_ID").value = "B1615";
+            if (document.getElementById("ptifrmtgtframe").contentDocument.getElementById("RUN_CNTL_USER_C_FROM_DEPTID").value.length === 10) {
+                document.getElementById("ptifrmtgtframe").contentDocument.getElementById("PRCSRQSTDLG_WRK_LOADPRCSRQSTDLGPB").click();
+            }else {
+                alert("Please add 10 digit Deptid to run control before continuing this script.");
+                observer.disconnect();
+            }
             localStorage.clear();
         }
 
