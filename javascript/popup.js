@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('#retrosList').addEventListener('change', convertString, false);
     document.querySelector('#terminationList').addEventListener('change', convertString, false);
     document.querySelector('#refreshList').addEventListener('change', convertString, false);
+    document.querySelector('#positionList').addEventListener('change', convertString, false);
 
     document.querySelector("#generateCheck").addEventListener("click", generateCheck, false);
     document.querySelector("#generateCheck").addEventListener("contextmenu", generateCheck, false);
@@ -483,6 +484,9 @@ function convertString(e){
     }else if (valueListID === "refreshList") {
         excelToJSONRefresh(pastedString, valueListID);
 
+    }else if (valueListID === "positionList") {
+        excelToJSONPosition(pastedString, valueListID);
+
     }else if (valueListID === "terminationList") {
         excelToJSONTerminations(pastedString, valueListID);
     };
@@ -590,6 +594,57 @@ function excelToJSONRefresh(pastedString, valueListID){
 
     // Set local storage of triggerDate
     localStorage.refreshList = textToJSON;
+
+    JSONToTable(JSON.parse(textToJSON), valueListID);
+}
+
+function excelToJSONPosition(pastedString, valueListID){
+
+    var pastedStringArray = pastedString.split(/[\n\r\t]/g);
+
+    var textToJSON = '[';
+
+    for (var i = 0; i < pastedStringArray.length; i++) {
+        // stepCount should be the remainder when divided by the number of data points for each employee
+        var stepCount = i%4;
+
+        // Check to see if value is missing on last employee values
+        // stepCount should be one less than the data points
+        // if were on the last element in the array
+        if (stepCount !== 3 && i === pastedStringArray.length) {
+            console.log("Missing values on end of array.");
+            return false;
+        }
+
+        // If this is the first item in the string (Reason Code)
+        if (stepCount === 0) {
+            // Make sure the Reason Code is three characters
+            if (pastedStringArray[i].length === 3) {
+                textToJSON += '{"reasonCode":"' + pastedStringArray[i] + '",';
+
+            }else {
+                console.log("Reason Code " + pastedStringArray[i] + " is not in a valid format. Iteration #" + i);
+                return false;
+            }
+
+        }else if (stepCount === 1) {// positionNumber
+            textToJSON += '"positionNumber":"' + pastedStringArray[i] + '",';
+        }else if (stepCount === 2) {// effectiveDate
+            textToJSON += '"effectiveDate":"' + pastedStringArray[i] + '",';
+        }else if (stepCount === 3) {// dataPoint
+            textToJSON += '"dataPoint":"' + pastedStringArray[i] + '"}'
+
+            // If this is the last element in the array add a square bracket, otherwise add a comma
+            if ((i + 1) === pastedStringArray.length) {
+                textToJSON += ']'
+            }else {
+                textToJSON += ','
+            }
+        }
+    }
+
+    // Set local storage of positionList
+    localStorage.positionList = textToJSON;
 
     JSONToTable(JSON.parse(textToJSON), valueListID);
 }
