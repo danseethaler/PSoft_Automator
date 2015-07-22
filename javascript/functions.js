@@ -688,17 +688,38 @@ function waitForSaveAndCalc() {
 function openSections () {
 
     var waitForSections = setInterval(function(){
+
+        // If the Change Data button exists
         if (!!document.getElementById("ptifrmtgtframe").contentDocument.getElementById('PAY_OL_PB_WRK_EMP_PB')) {
 
-            clearInterval(waitForSections);
-            localStorage.clear();
+            clearInterval(waitForSections); // Stop looking for the sections
+            localStorage.clear(); // Clear the local storage
 
             // Open earnings section
             document.getElementById("ptifrmtgtframe").contentDocument.getElementById('$ICField27$expand$0').click();
 
             // Open deductions section
             setTimeout(function (){
-                checkIframeAndID("PAY_DEDUCTION$expand$0","click");
+
+                // If the earnings section is still not expanded
+                if (document.getElementById("ptifrmtgtframe").contentDocument.getElementById('$ICField27$expand$0').childNodes[0].alt !== "Collapse section Earnings") {
+
+                    // Wait 300 ms
+                    setTimeout(function(){
+
+                        // Click on the expand button again
+                        document.getElementById("ptifrmtgtframe").contentDocument.getElementById('$ICField27$expand$0').click();
+
+                        // Wait 500 ms
+                        setTimeout(function (){
+                            // Open deductions section
+                            checkIframeAndID("PAY_DEDUCTION$expand$0","click");
+                        }, 500);
+                    },300)
+
+                }else {
+                    checkIframeAndID("PAY_DEDUCTION$expand$0","click");
+                }
             }, 500);
 
             // Open taxes section
