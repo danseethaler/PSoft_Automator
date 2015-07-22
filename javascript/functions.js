@@ -1,4 +1,3 @@
-
 function checkIframeAndID(nodeID, nodeAction, nodeValue) {
 
 
@@ -27,20 +26,20 @@ function checkIframeAndID(nodeID, nodeAction, nodeValue) {
 
             case "indexOf":
 
-            	if (document.getElementById("ptifrmtgtframe").contentDocument.getElementById("win0divPAGECONTAINER").outerHTML.indexOf(nodeValue) > 0) {
-            		return true;
-            	}else {
-            		return false;
-            	}
+                if (document.getElementById("ptifrmtgtframe").contentDocument.getElementById("win0divPAGECONTAINER").outerHTML.indexOf(nodeValue) > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
 
-            	break;
+                break;
 
             case "search":
-            	if (document.getElementById("ptifrmtgtframe").contentDocument.getElementById(nodeID).tagName === "INPUT") {
-            		return true;
-            	}else{
-            		return false;
-            	}
+                if (document.getElementById("ptifrmtgtframe").contentDocument.getElementById(nodeID).tagName === "INPUT") {
+                    return true;
+                } else {
+                    return false;
+                }
 
             default:
         }
@@ -92,7 +91,7 @@ function checkIframeAndClass(nodeClass, nodeValue, useIframe) {
 }
 
 // Navigation
-function openNewWin(componentName) {
+function openNewWin() {
 
     localStorage.nextAction = "navToFavorite";
 
@@ -122,7 +121,7 @@ function openNewWin(componentName) {
 
 function navToFavorite(componentName) {
 
-	// On the search page and the document title matches the componentName
+    // On the search page and the document title matches the componentName
     if (document.title === localStorage.componentName && checkIframeAndID(localStorage.searchFieldID, "search")) {
         localStorage.nextAction = "search";
         pageReady();
@@ -131,170 +130,170 @@ function navToFavorite(componentName) {
 
     document.getElementById('pthnavbca_MYFAVORITES').click();
 
-    var waitForFavorites = setInterval(function(){
+    var waitForFavorites = setInterval(function() {
 
-    	if (!!document.getElementById("pthnavmruroot")) {
+        if (!!document.getElementById("pthnavmruroot")) {
 
-    		clearInterval(waitForFavorites);
-    		openFavorite();
-    	};
+            clearInterval(waitForFavorites);
+            openFavorite();
+        };
 
-    },200)
+    }, 200)
 }
 
-function openFavorite () {
+function openFavorite() {
 
-	allFavorites = document.querySelectorAll("a[role='menuitem']");
+    allFavorites = document.querySelectorAll("a[role='menuitem']");
 
-	// Loop through all the favorite links in search of the corresponding component name
-	for (var i = 0; i < allFavorites.length; i++) {
+    // Loop through all the favorite links in search of the corresponding component name
+    for (var i = 0; i < allFavorites.length; i++) {
 
-	    if (allFavorites[i].innerHTML === localStorage.componentName && allFavorites[i].parentNode.parentNode.id !== "pthnavmruroot") {
+        if (allFavorites[i].innerHTML === localStorage.componentName && allFavorites[i].parentNode.parentNode.id !== "pthnavmruroot") {
 
-	        // Fix the href for the timesheet
-	        if (allFavorites[i].innerHTML === "Timesheet" && allFavorites[i].parentNode.id === "crefli_fav_HC_TL_MSS_EE_PRD_GBL3") {
-	            if (localStorage.environment === "prod") {
-	            	if (localStorage.system === "core") {
-		                allFavorites[i].href = "https://hrcore91.ldschurch.org/psp/HRCORE/EMPLOYEE/HRMS/c/ROLE_MANAGER.TL_MSS_EE_SRCH_PRD.GBL";
-	            	}else {
-		                allFavorites[i].href = "https://hradmin91.ldschurch.org/psp/HRADMIN/GLOBALHR/HRMS/c/ROLE_MANAGER.TL_MSS_EE_SRCH_PRD.GBL";
-	            	}
-	            } else {
-	            	if (localStorage.system === "core") {
-		                allFavorites[i].href = "https://hrcore91-sg-stage.ldschurch.org/psp/HRCORE_SG/EMPLOYEE/HRMS/c/ROLE_MANAGER.TL_MSS_EE_SRCH_PRD.GBL";
-	            	}else{
-		                allFavorites[i].href = "https://hradmin91-sg-stage.ldschurch.org/psp/HRADMIN_SG/GLOBALHR/HRMS/c/ROLE_MANAGER.TL_MSS_EE_SRCH_PRD.GBL";
-	            	}
-	            }
-	        }
+            // Fix the href for the timesheet
+            if (allFavorites[i].innerHTML === "Timesheet" && allFavorites[i].parentNode.id === "crefli_fav_HC_TL_MSS_EE_PRD_GBL3") {
+                if (localStorage.environment === "prod") {
+                    if (localStorage.system === "core") {
+                        allFavorites[i].href = "https://hrcore91.ldschurch.org/psp/HRCORE/EMPLOYEE/HRMS/c/ROLE_MANAGER.TL_MSS_EE_SRCH_PRD.GBL";
+                    } else {
+                        allFavorites[i].href = "https://hradmin91.ldschurch.org/psp/HRADMIN/GLOBALHR/HRMS/c/ROLE_MANAGER.TL_MSS_EE_SRCH_PRD.GBL";
+                    }
+                } else {
+                    if (localStorage.system === "core") {
+                        allFavorites[i].href = "https://hrcore91-sg-stage.ldschurch.org/psp/HRCORE_SG/EMPLOYEE/HRMS/c/ROLE_MANAGER.TL_MSS_EE_SRCH_PRD.GBL";
+                    } else {
+                        allFavorites[i].href = "https://hradmin91-sg-stage.ldschurch.org/psp/HRADMIN_SG/GLOBALHR/HRMS/c/ROLE_MANAGER.TL_MSS_EE_SRCH_PRD.GBL";
+                    }
+                }
+            }
 
-	        // Fix the href for Close Payable Time
-	        if (allFavorites[i].innerHTML === "Close Payable Time" && allFavorites[i].parentNode.id === "crefli_fav_C_RUNCTL_CTL924C_GBL") {
+            // Fix the href for Close Payable Time
+            if (allFavorites[i].innerHTML === "Close Payable Time" && allFavorites[i].parentNode.id === "crefli_fav_C_RUNCTL_CTL924C_GBL") {
 
-	            if (localStorage.environment === "stage") {
-	                allFavorites[i].href = "https://hrcore91-sg-stage.ldschurch.org/psp/HRCORE_SG/EMPLOYEE/HRMS/c/LDS_TL_ADMIN.C_RUNCTL_CTL924C.GBL";
-	            } else {
-	                allFavorites[i].href = "https://hrcore91.ldschurch.org/psp/HRCORE/EMPLOYEE/HRMS/c/LDS_TL_ADMIN.C_RUNCTL_CTL924C.GBL";
-	            }
-	        }
+                if (localStorage.environment === "stage") {
+                    allFavorites[i].href = "https://hrcore91-sg-stage.ldschurch.org/psp/HRCORE_SG/EMPLOYEE/HRMS/c/LDS_TL_ADMIN.C_RUNCTL_CTL924C.GBL";
+                } else {
+                    allFavorites[i].href = "https://hrcore91.ldschurch.org/psp/HRCORE/EMPLOYEE/HRMS/c/LDS_TL_ADMIN.C_RUNCTL_CTL924C.GBL";
+                }
+            }
 
-	        // Fix the href for Create Additional Pay
-	        if (allFavorites[i].innerHTML === "Create Additional Pay" && allFavorites[i].parentNode.id === "crefli_fav_HC_ADDITIONAL_PAY_USA4") {
+            // Fix the href for Create Additional Pay
+            if (allFavorites[i].innerHTML === "Create Additional Pay" && allFavorites[i].parentNode.id === "crefli_fav_HC_ADDITIONAL_PAY_USA4") {
 
-	            if (localStorage.environment === "stage") {
-	                allFavorites[i].href = "https://hrcore91-sg-stage.ldschurch.org/psp/HRCORE_SG/EMPLOYEE/HRMS/c/MAINTAIN_PAYROLL_DATA_US.ADDITIONAL_PAY.USA";
-	            } else {
-	                allFavorites[i].href = "https://hrcore91.ldschurch.org/psp/HRCORE/EMPLOYEE/HRMS/c/MAINTAIN_PAYROLL_DATA_US.ADDITIONAL_PAY.USA";
-	            }
-	        }
+                if (localStorage.environment === "stage") {
+                    allFavorites[i].href = "https://hrcore91-sg-stage.ldschurch.org/psp/HRCORE_SG/EMPLOYEE/HRMS/c/MAINTAIN_PAYROLL_DATA_US.ADDITIONAL_PAY.USA";
+                } else {
+                    allFavorites[i].href = "https://hrcore91.ldschurch.org/psp/HRCORE/EMPLOYEE/HRMS/c/MAINTAIN_PAYROLL_DATA_US.ADDITIONAL_PAY.USA";
+                }
+            }
 
-	        allFavorites[i].click();
+            allFavorites[i].click();
 
-	        // Check for the search values in localStorage
-			if (localStorage.searchValue !== undefined) {
-				console.log("setting nextAction = search");
-				localStorage.nextAction = "search";
+            // Check for the search values in localStorage
+            if (localStorage.searchValue !== undefined) {
+                console.log("setting nextAction = search");
+                localStorage.nextAction = "search";
 
-			}else if (localStorage.moreThanSearch !== undefined) {
-				console.log("Setting nextAction to continue");
-				localStorage.nextAction = "continue";
+            } else if (localStorage.moreThanSearch !== undefined) {
+                console.log("Setting nextAction to continue");
+                localStorage.nextAction = "continue";
 
-			}else {
-				console.log("Clearing Storage: searchValue field is undefined");
-				localStorage.clear();
-			}
+            } else {
+                console.log("Clearing Storage: searchValue field is undefined");
+                localStorage.clear();
+            }
 
-	        if (document.title === localStorage.componentName) {
+            if (document.title === localStorage.componentName) {
 
-	        	// Search the page once the search field exists
-				var waitingForSearchID = setInterval(function() {
+                // Search the page once the search field exists
+                var waitingForSearchID = setInterval(function() {
 
-			        if (checkIframeAndID(localStorage.searchFieldID)) {
+                    if (checkIframeAndID(localStorage.searchFieldID)) {
 
-			            searchPage();
-			            clearInterval(waitingForSearchID);
-			        };
+                        searchPage();
+                        clearInterval(waitingForSearchID);
+                    };
 
-			    }, 400)
-	        };
+                }, 400)
+            };
 
-	        return true;
-	    }
-	}
+            return true;
+        }
+    }
 
-	document.getElementById("pthnavbca_PORTAL_ROOT_OBJECT").click();
-	document.getElementById("pthnavsrchinput").value = localStorage.componentName;
-	document.getElementById("pthnavgo").click();
+    document.getElementById("pthnavbca_PORTAL_ROOT_OBJECT").click();
+    document.getElementById("pthnavsrchinput").value = localStorage.componentName;
+    document.getElementById("pthnavgo").click();
 
-	localStorage.nextAction = "createNewFavorite";
+    localStorage.nextAction = "createNewFavorite";
 }
 
-function createNewFavorite () {
+function createNewFavorite() {
 
-	var psHyperlinks = document.getElementsByClassName("PSHYPERLINK");
+    var psHyperlinks = document.getElementsByClassName("PSHYPERLINK");
 
-	for (var i = psHyperlinks.length - 1; i >= 0; i--) {
-	    if (psHyperlinks[i].innerHTML === localStorage.componentName) {
-	        psHyperlinks[i].click();
-	        localStorage.nextAction = "addToFavorites";
-	        return true;
-	    }
-	}
+    for (var i = psHyperlinks.length - 1; i >= 0; i--) {
+        if (psHyperlinks[i].innerHTML === localStorage.componentName) {
+            psHyperlinks[i].click();
+            localStorage.nextAction = "addToFavorites";
+            return true;
+        }
+    }
 
-	console.log("Component Name does not exist in search results.")
-	localStorage.clear();
+    console.log("Component Name does not exist in search results.")
+    localStorage.clear();
 }
 
-function addToFavorites () {
+function addToFavorites() {
 
     // Check for the search values in localStorage
-	if (localStorage.searchValue !== undefined) {
-		console.log("setting nextAction = search");
-		localStorage.nextAction = "search";
+    if (localStorage.searchValue !== undefined) {
+        console.log("setting nextAction = search");
+        localStorage.nextAction = "search";
 
-	}else{
-		localStorage.clear();
+    } else {
+        localStorage.clear();
 
-	}
+    }
 
-	// Click the favorites button
-	document.getElementById("pthnavbca_MYFAVORITES").click();
+    // Click the favorites button
+    document.getElementById("pthnavbca_MYFAVORITES").click();
 
-	var waitForFavorites = setInterval(function(){
-		if (!!document.getElementById("crefli_PT_PORTAL_ADD_FAV_GBL")) {
-			// Click add to favorites
-			document.getElementById("crefli_PT_PORTAL_ADD_FAV_GBL").click();
-			clearInterval(waitForFavorites);
+    var waitForFavorites = setInterval(function() {
+        if (!!document.getElementById("crefli_PT_PORTAL_ADD_FAV_GBL")) {
+            // Click add to favorites
+            document.getElementById("crefli_PT_PORTAL_ADD_FAV_GBL").click();
+            clearInterval(waitForFavorites);
 
-			addToFavoritesOK();
-		}
+            addToFavoritesOK();
+        }
 
-	}, 200)
+    }, 200)
 
-	document.getElementById("ptifrmatfok").click();
+    document.getElementById("ptifrmatfok").click();
 
-	// Click ok
-	document.getElementById("ptpopupmsgbtn1").click();
+    // Click ok
+    document.getElementById("ptpopupmsgbtn1").click();
 }
 
-function addToFavoritesOK () {
-	var waitForOK = setInterval(function(){
-		if (!!document.getElementById("ptifrmatfok")) {
-			// Click ok to accept the default name
-			document.getElementById("ptifrmatfok").click();
-			clearInterval(waitForOK);
+function addToFavoritesOK() {
+    var waitForOK = setInterval(function() {
+        if (!!document.getElementById("ptifrmatfok")) {
+            // Click ok to accept the default name
+            document.getElementById("ptifrmatfok").click();
+            clearInterval(waitForOK);
 
-			var waitForNextOK = setInterval(function(){
-				if (!!document.getElementById("ptpopupmsgbtn1")) {
-					// Click final ok
-					document.getElementById("ptpopupmsgbtn1").click();
-					pageReady();
-					clearInterval(waitForNextOK);
-				}
+            var waitForNextOK = setInterval(function() {
+                if (!!document.getElementById("ptpopupmsgbtn1")) {
+                    // Click final ok
+                    document.getElementById("ptpopupmsgbtn1").click();
+                    pageReady();
+                    clearInterval(waitForNextOK);
+                }
 
-			}, 200)
-		}
-	}, 200)
+            }, 200)
+        }
+    }, 200)
 }
 
 // Search Page
@@ -320,10 +319,10 @@ function searchPage() {
             if (queryTableRows[i].innerHTML === "TIME_UNION_DS") {
                 // Extract the row number from the id to be used to click on the right hyperlink.
                 var idLength = queryTableRows[i].id.length;
-                var queryRow = queryTableRows[i].id.substring(idLength - 2, idLength -1)
+                var queryRow = queryTableRows[i].id.substring(idLength - 2, idLength - 1)
                 if (/\d/.test(queryRow)) {
                     var queryRow = queryTableRows[i].id.substring(idLength - 2, idLength)
-                }else {
+                } else {
                     var queryRow = queryTableRows[i].id.substring(idLength - 1, idLength)
                 }
                 console.log(queryRow);
@@ -337,7 +336,7 @@ function searchPage() {
             return;
         }
 
-        checkIframeAndID("QRYRUN2$" + queryRow,"click");
+        checkIframeAndID("QRYRUN2$" + queryRow, "click");
         localStorage.nextAction = "searchQuery";
         return;
     }
@@ -349,33 +348,33 @@ function searchPage() {
     }
 
     if (localStorage.scriptAction === "terminateEmployees") {
-    	console.log("Calling terminateEmployees from searchPage function.")
+        console.log("Calling terminateEmployees from searchPage function.")
         searchTerminateEmployees();
         return;
     }
 
     if (localStorage.scriptAction === "updatePositions") {
-    	console.log("Calling searchPositionList from searchPage function.")
+        console.log("Calling searchPositionList from searchPage function.")
         searchPositionList();
         return;
     }
 
     if (localStorage.scriptAction === "refreshEmployees") {
-    	console.log("Calling refreshEmployees from searchPage function.")
+        console.log("Calling refreshEmployees from searchPage function.")
         searchRefreshEmployees();
         return;
     }
 
     // Set the Run Control ID parameter to "contains" if action is openUploadProcess
     if (localStorage.scriptAction === "openUploadProcess") {
-    	document.getElementById("ptifrmtgtframe").contentDocument.getElementById("C_TL_RUNCNTL_RUN_CNTL_ID$op").value = "8";
+        document.getElementById("ptifrmtgtframe").contentDocument.getElementById("C_TL_RUNCNTL_RUN_CNTL_ID$op").value = "8";
     };
 
     // Set the Run Control ID parameter to "contains" if action is openAbsenceAdjustments
     if (localStorage.scriptAction === "openAbsenceAdjustments") {
-    	document.getElementById("ptifrmtgtframe").contentDocument.getElementById("GP_PI_MNL_AE_VW_CAL_ID$op").value = "8";
-    	// Set the search parament to the current year
-    	document.getElementById("ptifrmtgtframe").contentDocument.getElementById("GP_PI_MNL_AE_VW_CAL_ID").value = new Date().getFullYear();
+        document.getElementById("ptifrmtgtframe").contentDocument.getElementById("GP_PI_MNL_AE_VW_CAL_ID$op").value = "8";
+        // Set the search parament to the current year
+        document.getElementById("ptifrmtgtframe").contentDocument.getElementById("GP_PI_MNL_AE_VW_CAL_ID").value = new Date().getFullYear();
     };
 
     // Check for the searchFieldID to exist
@@ -396,7 +395,7 @@ function searchPage() {
     }
 
     if (localStorage.scriptAction === "openTimesheet") {
-        var waitingForName = setInterval(function(){
+        var waitingForName = setInterval(function() {
             if (document.getElementById("ptifrmtgtframe").contentDocument.getElementById("NAME$0").innerHTML !== "Name") {
 
                 clearInterval(waitingForName);
@@ -409,10 +408,10 @@ function searchPage() {
                 psIframe.getElementById("DATE_DAY12").value = ppDate();
                 psIframe.getElementById("DATE_DAY12").dispatchEvent(changeEvent);
 
-                setTimeout(function(){
-                    checkIframeAndID("NAME$0","click");
+                setTimeout(function() {
+                    checkIframeAndID("NAME$0", "click");
 
-                    var waitForDateField = setInterval(function(){
+                    var waitForDateField = setInterval(function() {
 
                         if (!!document.getElementById("ptifrmtgtframe").contentDocument.getElementById("DATE_DAY1")) {
                             clearInterval(waitForDateField);
@@ -420,34 +419,65 @@ function searchPage() {
                             var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
                             psIframe.getElementById("DATE_DAY1").select()
                         }
-                    },300);
-                },300);
+                    }, 300);
+                }, 300);
             };
-        },200);
+        }, 200);
     };
 
     if (localStorage.scriptAction === "openClosePayableTime") {
 
-    	var waitForEmpIDField = setInterval(function(){
+        var waitForEmpIDField = setInterval(function() {
 
-    		if (checkIframeAndID("RUN_CNTL_USER_EMPLID")) {
+            if (checkIframeAndID("RUN_CNTL_USER_EMPLID")) {
 
-    			clearInterval(waitForEmpIDField);
+                clearInterval(waitForEmpIDField);
 
-		        checkIframeAndID("RUN_CNTL_USER_EMPLID","setValue",localStorage.empid)
-		        document.getElementById("ptifrmtgtframe").contentDocument.getElementById("RUN_CNTL_USER_FROMDATE").select();
+                checkIframeAndID("RUN_CNTL_USER_EMPLID", "setValue", localStorage.empid)
+                document.getElementById("ptifrmtgtframe").contentDocument.getElementById("RUN_CNTL_USER_FROMDATE").select();
 
-		        console.log("Clearing Storage: search completed for close payable time.")
-		        localStorage.clear();
+                console.log("Clearing Storage: search completed for close payable time.")
+                localStorage.clear();
 
-    		};
+            };
 
-    	},200)
+        }, 200)
 
     };
 
+    if (localStorage.scriptAction === "openReviewPaycheck") {
+
+        var waitForEmpIDField = setInterval(function() {
+
+            // If the search field no longer exists then the search found a result
+            if (!checkIframeAndID("ZZ_PAY_CHK_VW_EMPLID")) {
+                console.log("Search was successful.");
+                localStorage.clear();
+                clearInterval(waitForEmpIDField);
+
+            }
+
+            if (checkIframeAndClass("PSSRCHINSTRUCTIONS", "No matching values were found.")) {
+
+                console.log("Waiting for search results.");
+
+                clearInterval(waitForEmpIDField);
+
+                // Set local storage values for Canadian Paycheques
+                localStorage.scriptAction = "openReviewPaycheque";
+                localStorage.componentName = "Review Paycheque - CAN";
+                localStorage.nextAction = "search";
+                localStorage.searchFieldID = "ZZ_PCHK_VCAN_EMPLID";
+                localStorage.pageStay = "true";
+                localStorage.moreThanSearch = "false";
+
+                openNewWin();
+            };
+        }, 400)
+    };
+
     if (localStorage.scriptAction === "generateCheck") {
-    	startMutationWatchingBody();
+        startMutationWatchingBody();
     };
 
     if (localStorage.moreThanSearch !== "true") {
@@ -457,7 +487,7 @@ function searchPage() {
 }
 
 // Generate Triggers
-function searchTriggers () {
+function searchTriggers() {
 
     var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
@@ -489,15 +519,15 @@ function searchTriggers () {
 
         // If the EmplRcd Field Exists then make sure it's blank
         if (!!psIframe.getElementById("C_TL_TR_STAT_VW_EMPL_RCD")) {
-                psIframe.getElementById("C_TL_TR_STAT_VW_EMPL_RCD").value = JSON.parse(localStorage.thisTrigger).emplRcd;
+            psIframe.getElementById("C_TL_TR_STAT_VW_EMPL_RCD").value = JSON.parse(localStorage.thisTrigger).emplRcd;
 
-                psIframe.getElementById("#ICSearch").click();
+            psIframe.getElementById("#ICSearch").click();
 
-                console.log("Calling setTrigger()")
-                setTrigger();
-        }else { // Click the advanced search option first then search with the EmplRcd
+            console.log("Calling setTrigger()")
+            setTrigger();
+        } else { // Click the advanced search option first then search with the EmplRcd
             psIframe.querySelector("a[name='#ICAdvSearch']").click();
-            setTimeout(function(){
+            setTimeout(function() {
 
                 psIframe.getElementById("C_TL_TR_STAT_VW_EMPL_RCD").value = JSON.parse(localStorage.thisTrigger).emplRcd;
 
@@ -505,13 +535,13 @@ function searchTriggers () {
 
                 console.log("Calling setTrigger()")
                 setTrigger();
-            },300)
+            }, 300)
         }
     }
 }
 
-function setTrigger () {
-    var waitingForTriggerFields = setInterval(function(){
+function setTrigger() {
+    var waitingForTriggerFields = setInterval(function() {
 
         var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
@@ -530,7 +560,7 @@ function setTrigger () {
             psIframe.getElementById("TL_TR_STATUS_EARLIEST_CHGDT").dispatchEvent(changeEvent);
 
             // If the TA Needed box is already checked then save and return
-            if(!!psIframe.getElementById("TL_TR_STATUS_TA_STATUS").checked){
+            if (!!psIframe.getElementById("TL_TR_STATUS_TA_STATUS").checked) {
 
                 // Click save
                 psIframe.getElementById("#ICSave").click()
@@ -538,73 +568,73 @@ function setTrigger () {
                 console.log("Calling waitForSave()")
                 waitForSave("pthnavbccrefanc_C_TL_TR_STATUS_CMP_GBL", "C_TL_TR_STAT_VW_EMPLID", true);
 
-            // Otheriwise check the box -> saveAndReturn is called in the bodyObserver
-            }else{
+                // Otheriwise check the box -> saveAndReturn is called in the bodyObserver
+            } else {
                 psIframe.getElementById("TL_TR_STATUS_TA_STATUS").click();
 
-                var waitForPopup = setInterval(function(){
-	                if (checkIframeAndClass("popupText","<br>SQLExec: Failed to find a matching SQL stateme",false)) {
-	                	clearInterval(waitForPopup);
+                var waitForPopup = setInterval(function() {
+                    if (checkIframeAndClass("popupText", "<br>SQLExec: Failed to find a matching SQL stateme", false)) {
+                        clearInterval(waitForPopup);
 
-		                document.getElementById("#ICOK").click();
+                        document.getElementById("#ICOK").click();
 
-		                console.log("Calling waitForSave()")
-		                waitForSave("pthnavbccrefanc_C_TL_TR_STATUS_CMP_GBL", "C_TL_TR_STAT_VW_EMPLID");
+                        console.log("Calling waitForSave()")
+                        waitForSave("pthnavbccrefanc_C_TL_TR_STATUS_CMP_GBL", "C_TL_TR_STAT_VW_EMPLID");
 
-		            }
-                },200)
+                    }
+                }, 200)
             }
         }
     }, 300)
 }
 
-function waitForSave (menuBarID, searchFieldID, quickSave) {
+function waitForSave(menuBarID, searchFieldID, quickSave) {
 
-  // Initiate the interval
-  var waitForSaveNode = setInterval(function(){
+    // Initiate the interval
+    var waitForSaveNode = setInterval(function() {
 
-    // Set the iframe variable
-    var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+        // Set the iframe variable
+        var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
-    var savedWinState = psIframe.getElementById("SAVED_win0").style.display;
-    var waitWinState = psIframe.getElementById("WAIT_win0").style.display;
+        var savedWinState = psIframe.getElementById("SAVED_win0").style.display;
+        var waitWinState = psIframe.getElementById("WAIT_win0").style.display;
 
-    // If the style of the SAVED_win0 === block --> the page has been saved
-    if (savedWinState === "block" || (savedWinState === "none" && waitWinState === "none" && quickSave === true)) {
-      clearInterval(waitForSaveNode);
+        // If the style of the SAVED_win0 === block --> the page has been saved
+        if (savedWinState === "block" || (savedWinState === "none" && waitWinState === "none" && quickSave === true)) {
+            clearInterval(waitForSaveNode);
 
-      // Set localStorage.nextAction
-      localStorage.nextAction = "search";
+            // Set localStorage.nextAction
+            localStorage.nextAction = "search";
 
-      // If the search field isn't present return to search page
-      if (!psIframe.getElementById(searchFieldID)) {
-          document.getElementById(menuBarID).click();
-      }
+            // If the search field isn't present return to search page
+            if (!psIframe.getElementById(searchFieldID)) {
+                document.getElementById(menuBarID).click();
+            }
 
-      console.log("Calling lookForSearchNode()");
-      lookForSearchNode(searchFieldID);
+            console.log("Calling lookForSearchNode()");
+            lookForSearchNode(searchFieldID);
 
-      // Stop iterating through nodes
-      return;
-    }
-  },300);
+            // Stop iterating through nodes
+            return;
+        }
+    }, 300);
 }
 
-function lookForSearchNode (searchFieldID) {
-  // If the search field shows up and this code is still running the link didn't initiate a page reload
-  waitingForSearchNode = setInterval(function(){
+function lookForSearchNode(searchFieldID) {
+    // If the search field shows up and this code is still running the link didn't initiate a page reload
+    waitingForSearchNode = setInterval(function() {
 
-      // Set the iframe variable
-      var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+        // Set the iframe variable
+        var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
-      if (!!psIframe.getElementById(searchFieldID)) {
-          console.log("Called pageReady manually");
+        if (!!psIframe.getElementById(searchFieldID)) {
+            console.log("Called pageReady manually");
 
-          clearInterval(waitingForSearchNode);
+            clearInterval(waitingForSearchNode);
 
-          pageReady();
-      };
-  },500);
+            pageReady();
+        };
+    }, 500);
 }
 // Off-Cycle Check
 function waitForPayline() {
@@ -685,9 +715,9 @@ function waitForSaveAndCalc() {
     }, 500)
 }
 
-function openSections () {
+function openSections() {
 
-    var waitForSections = setInterval(function(){
+    var waitForSections = setInterval(function() {
 
         // If the Change Data button exists
         if (!!document.getElementById("ptifrmtgtframe").contentDocument.getElementById('PAY_OL_PB_WRK_EMP_PB')) {
@@ -699,26 +729,26 @@ function openSections () {
             document.getElementById("ptifrmtgtframe").contentDocument.getElementById('$ICField27$expand$0').click();
 
             // Open deductions section
-            setTimeout(function (){
+            setTimeout(function() {
 
                 // If the earnings section is still not expanded
                 if (document.getElementById("ptifrmtgtframe").contentDocument.getElementById('$ICField27$expand$0').childNodes[0].alt !== "Collapse section Earnings") {
 
                     // Wait 300 ms
-                    setTimeout(function(){
+                    setTimeout(function() {
 
                         // Click on the expand button again
                         document.getElementById("ptifrmtgtframe").contentDocument.getElementById('$ICField27$expand$0').click();
 
                         // Wait 500 ms
-                        setTimeout(function (){
+                        setTimeout(function() {
                             // Open deductions section
-                            checkIframeAndID("PAY_DEDUCTION$expand$0","click");
+                            checkIframeAndID("PAY_DEDUCTION$expand$0", "click");
                         }, 500);
-                    },300)
+                    }, 300)
 
-                }else {
-                    checkIframeAndID("PAY_DEDUCTION$expand$0","click");
+                } else {
+                    checkIframeAndID("PAY_DEDUCTION$expand$0", "click");
                 }
             }, 500);
 
@@ -728,11 +758,11 @@ function openSections () {
             // }, 1000);
         }
 
-    },500);
+    }, 500);
 }
 
 // Refresh Employees
-function searchRefreshEmployees () {
+function searchRefreshEmployees() {
     // This function parses and updates the refreshList from local storage and searches the page
     // with the empID from the next available termination
     if (localStorage.refreshList === undefined) {
@@ -781,7 +811,7 @@ function searchRefreshEmployees () {
     addNewRowRefresh();
 }
 
-function addNewRowRefresh () {
+function addNewRowRefresh() {
     var waitForJobData = setInterval(function() {
 
         var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -798,19 +828,19 @@ function addNewRowRefresh () {
         if (!!psIframe.getElementById("$ICField12$new$0$$0")) {
             clearInterval(waitForJobData);
 
-            setTimeout(function(){
+            setTimeout(function() {
                 psIframe.getElementById("$ICField12$new$0$$0").click();
 
                 console.log("calling addRefreshValues")
                 addRefreshValues();
-            },200)
+            }, 200)
         }
-    },300)
+    }, 300)
 }
 
-function addRefreshValues () {
+function addRefreshValues() {
 
-    var waitForJobDataRow = setInterval(function(){
+    var waitForJobDataRow = setInterval(function() {
 
         // Set the iframe variable
         var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -832,7 +862,7 @@ function addRefreshValues () {
             psIframe.getElementById("JOB_ACTION$0").value = "POS";
             psIframe.getElementById("JOB_ACTION$0").dispatchEvent(changeEvent);
 
-            var waitForAction = setInterval(function(){
+            var waitForAction = setInterval(function() {
                 if (psIframe.getElementById("WAIT_win0").style.display === "none") {
                     clearInterval(waitForAction)
 
@@ -845,9 +875,9 @@ function addRefreshValues () {
                     // Call setRehireData function
                     refreshPosition();
                 }
-            },200)
+            }, 200)
         }
-    },300)
+    }, 300)
 }
 
 function refreshPosition() {
@@ -855,9 +885,9 @@ function refreshPosition() {
     // Set the iframe variable
     var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
-	psIframe.getElementById("JOB_POSITION_NBR$prompt$0").click();
+    psIframe.getElementById("JOB_POSITION_NBR$prompt$0").click();
 
-    var waitForModal = setInterval(function(){
+    var waitForModal = setInterval(function() {
 
         if (!!document.getElementById("ptModFrame_0")) {
 
@@ -866,7 +896,7 @@ function refreshPosition() {
 
             var modal = document.getElementById("ptModFrame_0").contentDocument;
 
-            var waitForPosition = setInterval(function(){
+            var waitForPosition = setInterval(function() {
 
                 console.log("Checking for position number field");
                 var modal = document.getElementById("ptModFrame_0").contentDocument;
@@ -875,36 +905,36 @@ function refreshPosition() {
                     clearInterval(waitForPosition);
 
                     // Enter the position number
-                	modal.getElementById("POSN_DATA_VW_POSITION_NBR").value = JSON.parse(localStorage.thisRefresh).positionNum;
+                    modal.getElementById("POSN_DATA_VW_POSITION_NBR").value = JSON.parse(localStorage.thisRefresh).positionNum;
 
                     // Search for the position
                     modal.getElementById("#ICSearch").click();
 
-                    var waitForSearch = setInterval(function(){
+                    var waitForSearch = setInterval(function() {
 
                         if (!modal.getElementById("RESULT0$1")) {
 
                             clearInterval(waitForSearch);
 
-                            setTimeout(function(){
+                            setTimeout(function() {
 
                                 // Select the first search result
                                 modal.getElementById("SEARCH_RESULT1").click();
 
-                                setTimeout(function(){
+                                setTimeout(function() {
                                     // Select the first search result
                                     psIframe.getElementById("#ICSave").click();
 
                                     startMutationWatchingIframe();
                                     startMutationWatchingBody();
 
-                                },500)
+                                }, 500)
 
-                            },500)
+                            }, 500)
                         }
                     })
                 }
-            },300)
+            }, 300)
         }
     })
 }
@@ -962,7 +992,7 @@ function searchPositionList() {
 
 }
 
-function addNewPositionRow () {
+function addNewPositionRow() {
     var waitForPositionData = setInterval(function() {
 
         var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -979,19 +1009,19 @@ function addNewPositionRow () {
         if (!!psIframe.getElementById("$ICField3$new$0$$0")) {
             clearInterval(waitForPositionData);
 
-            setTimeout(function(){
+            setTimeout(function() {
                 psIframe.getElementById("$ICField3$new$0$$0").click();
 
                 console.log("calling addPositionValues")
                 addPositionValues();
-            },200)
+            }, 200)
         }
-    },300)
+    }, 300)
 }
 
-function addPositionValues () {
+function addPositionValues() {
 
-    var waitForPositionDataRow = setInterval(function(){
+    var waitForPositionDataRow = setInterval(function() {
 
         // Set the iframe variable
         var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -1013,7 +1043,7 @@ function addPositionValues () {
             psIframe.getElementById("POSITION_DATA_ACTION_REASON$0").value = JSON.parse(localStorage.thisPosition).reasonCode;
             psIframe.getElementById("POSITION_DATA_ACTION_REASON$0").dispatchEvent(changeEvent);
 
-            var waitForAction = setInterval(function(){
+            var waitForAction = setInterval(function() {
                 if (psIframe.getElementById("WAIT_win0").style.display === "none") {
                     clearInterval(waitForAction)
 
@@ -1021,9 +1051,9 @@ function addPositionValues () {
                     console.log("Calling updateDataPoint function");
                     updateDataPoint();
                 }
-            },200)
+            }, 200)
         }
-    },300)
+    }, 300)
 }
 
 function updateDataPoint() {
@@ -1055,7 +1085,7 @@ function updateDataPoint() {
         // Navigate to the LDS-Position Data tab
         psIframe.querySelector("[name='#ICPanel2']").click()
 
-        var waitForPage = setInterval(function(){
+        var waitForPage = setInterval(function() {
             if (!!psIframe.getElementById('POSITION_DATA_C_APPROVED_HRS$0')) {
 
                 clearInterval(waitForPage);
@@ -1075,7 +1105,7 @@ function updateDataPoint() {
                 startMutationWatchingBody();
 
             }
-        },500);
+        }, 500);
 
     }
 
@@ -1090,7 +1120,7 @@ function updateDataPoint() {
 }
 
 // Terminate Employees
-function searchTerminateEmployees () {
+function searchTerminateEmployees() {
     // This function parses and updates the terminationList from local storage and searches the page
     // with the empID from the next available termination
     if (localStorage.terminationList === undefined) {
@@ -1139,7 +1169,7 @@ function searchTerminateEmployees () {
     addNewRow();
 }
 
-function addNewRow () {
+function addNewRow() {
     var waitForJobData = setInterval(function() {
 
         var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -1156,19 +1186,19 @@ function addNewRow () {
         if (!!psIframe.getElementById("$ICField12$new$0$$0")) {
             clearInterval(waitForJobData);
 
-            setTimeout(function(){
+            setTimeout(function() {
                 psIframe.getElementById("$ICField12$new$0$$0").click();
 
                 console.log("calling addTermValues")
                 addTermValues();
-            },200)
+            }, 200)
         }
-    },300)
+    }, 300)
 }
 
-function addTermValues () {
+function addTermValues() {
 
-    var waitForJobDataRow = setInterval(function(){
+    var waitForJobDataRow = setInterval(function() {
 
         // Set the iframe variable
         var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -1190,7 +1220,7 @@ function addTermValues () {
             psIframe.getElementById("JOB_ACTION$0").value = JSON.parse(localStorage.thisTermination).jobAction;
             psIframe.getElementById("JOB_ACTION$0").dispatchEvent(changeEvent);
 
-            var waitForAction = setInterval(function(){
+            var waitForAction = setInterval(function() {
                 if (psIframe.getElementById("WAIT_win0").style.display === "none") {
                     clearInterval(waitForAction)
 
@@ -1204,14 +1234,14 @@ function addTermValues () {
                     // Call setRehireData function
                     setRehireData();
                 }
-            },200)
+            }, 200)
         }
-    },300)
+    }, 300)
 }
 
-function setRehireData () {
+function setRehireData() {
 
-    var waitingForRehireData = setInterval(function(){
+    var waitingForRehireData = setInterval(function() {
         var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
         if (!!psIframe.getElementById("C_EMPLOYMENT_C_SUITABLE_FOR_REH")) {
 
@@ -1226,11 +1256,11 @@ function setRehireData () {
             startMutationWatchingIframe();
             startMutationWatchingBody();
         }
-    },300)
+    }, 300)
 }
 
 // Payline Adjustments
-function searchRetros () {
+function searchRetros() {
     // This function parses and updates the retrosList from local storage and searches the page
     // with the empID from the next available retro list
 
@@ -1241,7 +1271,7 @@ function searchRetros () {
     // If we're done processing then display a message once the search page appears
     if (localStorage.retrosList.length < 3) {
 
-    	// Remove the scriptAction from localStorage
+        // Remove the scriptAction from localStorage
         localStorage.removeItem("scriptAction");
 
         if (!!document.getElementById("ptifrmtgtframe")) {
@@ -1252,19 +1282,19 @@ function searchRetros () {
 
                 console.log("Retros processed. Displaying quickMessage");
 
-	            if (localStorage.empsNotProcessed !== undefined) {
-	                quickMessage("The following EmpIDs were not processed : " + localStorage.empsNotProcessed)
-	            }else{
-	                quickMessage("All retros provided have been processed.");
-	            }
+                if (localStorage.empsNotProcessed !== undefined) {
+                    quickMessage("The following EmpIDs were not processed : " + localStorage.empsNotProcessed)
+                } else {
+                    quickMessage("All retros provided have been processed.");
+                }
 
-	            return;
-	        }
-	    }
+                return;
+            }
+        }
     }
 
     // Set the iframe variable
-	var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+    var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
     // Get the retrosList string from localStorage and convert it to an object
     var newretrosList = JSON.parse(localStorage.retrosList)
@@ -1299,7 +1329,7 @@ function addNewPayline() {
             if (localStorage.empsNotProcessed === undefined) {
                 localStorage.empsNotProcessed = JSON.parse(localStorage.thisRetro).empid + ", ";
 
-            }else{
+            } else {
                 localStorage.empsNotProcessed += JSON.parse(localStorage.thisRetro).empid + ", ";
             }
 
@@ -1308,12 +1338,12 @@ function addNewPayline() {
                 console.log("Calling searchRetros from missing EmpID")
                 searchRetros();
 
-            // If there are no more retros then display the message of empsNotProcessed
-            }else{
-                setTimeout(function(){
+                // If there are no more retros then display the message of empsNotProcessed
+            } else {
+                setTimeout(function() {
                     if (localStorage.empsNotProcessed !== undefined) {
                         quickMessage("The following EmpIDs were not processed : " + localStorage.empsNotProcessed.substring(0, localStorage.empsNotProcessed.length - 2))
-                    }else{
+                    } else {
                         quickMessage("The retros provided have been processed.");
                         localStorage.clear();
                     }
@@ -1321,7 +1351,7 @@ function addNewPayline() {
                     // Clear the search elements
                     psIframe.getElementById("#ICClear").click()
 
-                },500)
+                }, 500)
             }
 
             return;
@@ -1329,28 +1359,28 @@ function addNewPayline() {
 
         // Make sure the plus button exists and click it
         if (!!psIframe.getElementById("$ICField22$new$0$$0")) {
-            setTimeout(function(){
+            setTimeout(function() {
                 psIframe.getElementById("$ICField22$new$0$$0").click();
 
                 console.log("calling addRetroValues")
                 addRetroValues();
 
                 clearInterval(waitForPayline);
-            },200)
+            }, 200)
         };
 
-    },300)
+    }, 300)
 }
 
-function addRetroValues () {
+function addRetroValues() {
 
-    var waitForPayline = setInterval(function(){
+    var waitForPayline = setInterval(function() {
 
         // Set the iframe variable
         var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
         // If we're on the second payline
-        if (psIframe.getElementsByClassName("PSGRIDCOUNTER")[0].innerHTML.substring(0,1) === "2") {
+        if (psIframe.getElementsByClassName("PSGRIDCOUNTER")[0].innerHTML.substring(0, 1) === "2") {
 
             clearInterval(waitForPayline);
 
@@ -1376,10 +1406,10 @@ function addRetroValues () {
             // Click save
             psIframe.getElementById("#ICSave").click();
 
-            waitForSave("pthnavbccrefanc_HC_PAY_SHEET_LINE_USA2","PAY_LINE_WORK_EMPLID")
+            waitForSave("pthnavbccrefanc_HC_PAY_SHEET_LINE_USA2", "PAY_LINE_WORK_EMPLID")
         }
 
-    },300);
+    }, 300);
 }
 
 // Miscellaneous functions
@@ -1452,7 +1482,7 @@ function quickMessage(message, buttonText) {
     }
 }
 
-function onlineCheckDates(){
+function onlineCheckDates() {
 
     // 7 hours = 25200000
     // 1 day = 86400000
@@ -1543,17 +1573,25 @@ function displayModal(modalMessage) {
     }, 3000);
 }
 
-function clearObservers () {
+function clearObservers() {
 
     // New mutation observer to replace any outstanding observer
-    var observer = new MutationObserver( function (mutations) { } );
+    var observer = new MutationObserver(function(mutations) {});
 
-    observer.observe(document.body, { attributes: true, childList: true, characterData: false });
+    observer.observe(document.body, {
+        attributes: true,
+        childList: true,
+        characterData: false
+    });
     observer.disconnect();
 
     // New mutation observer to replace any outstanding observer
     if (document.getElementById("ptifrmtgtframe")) {
-        observer.observe(document.getElementById("ptifrmtgtframe").contentDocument, { attributes: true, childList: true, characterData: false });
+        observer.observe(document.getElementById("ptifrmtgtframe").contentDocument, {
+            attributes: true,
+            childList: true,
+            characterData: false
+        });
         observer.disconnect();
     };
 
@@ -1561,8 +1599,12 @@ function clearObservers () {
     var targets = document.querySelectorAll('[class=someclassname]');
 
     // Update/replace the observers on all the targets
-    for(var i = 0; i < targets.length; ++i) {
-        observer.observe(targets[i], { attributes: true, childList: true, characterData: false } );
+    for (var i = 0; i < targets.length; ++i) {
+        observer.observe(targets[i], {
+            attributes: true,
+            childList: true,
+            characterData: false
+        });
     }
 }
 
