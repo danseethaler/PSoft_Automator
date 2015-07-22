@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 "openUpdateEmployeeTaxData",
                 "openUpdatePayrollOptions",
                 "toggleTerminateGroup",
+                "toggleUpdatePosition",
                 "toggleRefreshJobData"
             ];
 
@@ -57,36 +58,35 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    { // Add event listeners
-        document.querySelector("#main").addEventListener("click", toggleDivs, false);
+    // Add event listeners
+    document.querySelector("#main").addEventListener("click", toggleDivs, false);
 
-        document.querySelector('#triggerList').addEventListener('change', convertString, false);
-        // document.querySelector('#additionalPayList').addEventListener('change', convertString, false);
-        document.querySelector('#retrosList').addEventListener('change', convertString, false);
-        document.querySelector('#terminationList').addEventListener('change', convertString, false);
-        document.querySelector('#refreshList').addEventListener('change', convertString, false);
+    document.querySelector('#triggerList').addEventListener('change', convertString, false);
+    document.querySelector('#retrosList').addEventListener('change', convertString, false);
+    document.querySelector('#terminationList').addEventListener('change', convertString, false);
+    document.querySelector('#refreshList').addEventListener('change', convertString, false);
 
-        document.querySelector("#generateCheck").addEventListener("click", generateCheck, false);
-        document.querySelector("#generateCheck").addEventListener("contextmenu", generateCheck, false);
-        document.querySelector("#generateTriggers").addEventListener("click", generateTriggers, false);
-        document.querySelector("#generateTriggers").addEventListener("contextmenu", generateTriggers, false);
-        document.querySelector("#generateRetros").addEventListener("click", generateRetros, false);
-        document.querySelector("#generateRetros").addEventListener("contextmenu", generateRetros, false);
-        document.querySelector("#terminateEmployees").addEventListener("click", terminateEmployees, false);
-        document.querySelector("#terminateEmployees").addEventListener("contextmenu", terminateEmployees, false);
-        document.querySelector("#refreshEmployees").addEventListener("click", refreshEmployees, false);
-        document.querySelector("#refreshEmployees").addEventListener("contextmenu", refreshEmployees, false);
-        // document.querySelector("#createAdditionalPay").addEventListener("click", generateAdditionalPay, false);
+    document.querySelector("#generateCheck").addEventListener("click", generateCheck, false);
+    document.querySelector("#generateCheck").addEventListener("contextmenu", generateCheck, false);
+    document.querySelector("#generateTriggers").addEventListener("click", generateTriggers, false);
+    document.querySelector("#generateTriggers").addEventListener("contextmenu", generateTriggers, false);
+    document.querySelector("#generateRetros").addEventListener("click", generateRetros, false);
+    document.querySelector("#generateRetros").addEventListener("contextmenu", generateRetros, false);
+    document.querySelector("#terminateEmployees").addEventListener("click", terminateEmployees, false);
+    document.querySelector("#terminateEmployees").addEventListener("contextmenu", terminateEmployees, false);
+    document.querySelector("#refreshEmployees").addEventListener("click", refreshEmployees, false);
+    document.querySelector("#refreshEmployees").addEventListener("contextmenu", refreshEmployees, false);
+    document.querySelector("#updatePositions").addEventListener("click", updatePositions, false);
+    document.querySelector("#updatePositions").addEventListener("contextmenu", updatePositions, false);
 
-        var mySquares = document.getElementsByClassName('square');
+    var mySquares = document.getElementsByClassName('square');
 
-        for (var i = 0; i < mySquares.length; i++) {
-            mySquares[i].addEventListener("contextmenu", sendAction, false);
-            mySquares[i].addEventListener("click", sendAction, false);
-        }
-
-        document.addEventListener("keypress", insertEmpID, false);
+    for (var i = 0; i < mySquares.length; i++) {
+        mySquares[i].addEventListener("contextmenu", sendAction, false);
+        mySquares[i].addEventListener("click", sendAction, false);
     }
+
+    document.addEventListener("keypress", insertEmpID, false);
 
     // Clear localStorage when page action is clicked
     chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) {
@@ -267,6 +267,35 @@ function refreshEmployees (e) {
         "scriptAction": e.target.id,
         "componentName": "Add/Update Job",
         "refreshList": localStorage.refreshList
+    };
+
+    // Set the pageStay based on the contextMenu or click event
+    if (e.type === "contextmenu") {
+        e.preventDefault();
+    }else if (e.type === "click") {
+        requestObject.pageStay = true;
+    }
+
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
+      });
+    });
+
+    window.close();
+}
+
+function updatePositions (e) {
+
+    if (localStorage.positionList === undefined) {
+        // TODO: Add quick message function to explain why a function doesn't continue
+        console.log("localStorage.positionList is undefined : ", localStorage.refreshList)
+        return false;
+    };
+
+    var requestObject = {
+        "scriptAction": e.target.id,
+        "componentName": "Add/Update Position",
+        "positionList": localStorage.positionList
     };
 
     // Set the pageStay based on the contextMenu or click event
