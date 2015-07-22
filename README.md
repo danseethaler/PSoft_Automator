@@ -13,5 +13,5 @@ This Chrome Extension is designed to add functionality to Chrome when working in
 Some navigation pages have an additional step of processing. This additional processing automatically takes the next logical step for the user. The pages that have additional processing are defined below.
 
 - Navigating to the time sheet with the extension will search for the EmpID specified, click search, and then it will set the date parameter on the search page to the last day of the most recent pay period and click on the employee name. This sets the default time sheet view to the most recently completed pay period which is often the desired date range. The date used comes from the ppDate() function.
-
 - The TU nav button opens the Time Union query for the EmpID specified and uses the most recent pay period end date. The first step is to navigate to the query manager page, then click on the HTML link in the row with the "A_TIME_UNION" query name.
+- The RP nav button opens the Review Paycheck page. If no results are found for the EmpID provided the navigation process will begin with the Review Paycheque - CAN component name. The logic is if the employee has no paychecks issued in USA there's a good possibility the employee is working in Canada.
