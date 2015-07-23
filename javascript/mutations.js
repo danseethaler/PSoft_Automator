@@ -284,9 +284,9 @@ function bodyObserver_updatePositions (mutations, bodyObserver) {
                 console.log("Clicked OK on corresponding Church Service warning");
                 document.getElementById("#ICOK").click();
 
-            // }else if (checkIframeAndClass("popupText","<br>Warning -- Head count of 2 exceeds maximum hea",false)) {
-            //     console.log("Clicked OK on Head Count warning");
-            //     document.getElementById("#ICOK").click();
+            }else if (checkIframeAndClass("popupText","<br>Warning -- Probation Date must be later than H",false)) {
+                console.log("Clicked OK on Probation Date Warning");
+                document.getElementById("#ICOK").click();
 
             }else{
 
