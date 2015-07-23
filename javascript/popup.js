@@ -1,61 +1,69 @@
 // Add event listeners once the DOM has fully loaded by listening for the
 // `DOMContentLoaded` event on the document, and adding your listeners to
 // specific elements when it triggers.
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
+
+    localStorage.clear();
 
     // Hide all the DOM elements that don't apply to the current system
-    chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, {scriptAction: "getSystem"}, function(response) {
-        if (response.system === "core") {
-            var hideIDs = [
-                "openAddUpdatePosition",
-                "openAddAPerson",
-                "openI9EVerifyHome",
-                "openModifyAPerson",
-                "openUpdateEmployeeTaxData",
-                "openUpdatePayrollOptions",
-                "toggleTerminateGroup",
-                "toggleUpdatePosition",
-                "toggleRefreshJobData"
-            ];
+    chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true
+    }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            scriptAction: "getSystem"
+        }, function(response) {
+            if (response.system === "core") {
+                var hideIDs = [
+                    "openAddUpdatePosition",
+                    "openAddAPerson",
+                    "openI9EVerifyHome",
+                    "openModifyAPerson",
+                    "openUpdateEmployeeTaxData",
+                    "openUpdatePayrollOptions",
+                    "toggleTerminateGroup",
+                    "toggleUpdatePosition",
+                    "toggleRefreshJobData"
+                ];
 
-            for (var i = hideIDs.length - 1; i >= 0; i--) {
-                var nodeParent = document.getElementById(hideIDs[i]).parentNode;
-                nodeParent.removeChild(document.getElementById(hideIDs[i]));
-            };
+                for (var i = hideIDs.length - 1; i >= 0; i--) {
+                    var nodeParent = document.getElementById(hideIDs[i]).parentNode;
+                    nodeParent.removeChild(document.getElementById(hideIDs[i]));
+                };
 
-        }else if(response.system === "admin"){
+            } else if (response.system === "admin") {
 
-            var hideIDs = [
-                "toggleOffCycleGroup",
-                "toggleTriggerGroup",
-                "toggleRetrosGroup",
-                "openRequestTimeAdmin",
-                "openLeaveReport",
-                "openAMCalc",
-                "openProcessMonitor",
-                "openTLTRStatus",
-                "openMaintainTimeReporterData",
-                "openOCOnDemand",
-                "openClosePayableTime",
-                "openByPayline",
-                "openReviewTriggers",
-                "openTaskGroup",
-                "openUploadProcess",
-                "openAbsenceAdjustments",
-                "openAbsenceEvents",
-                "openCreateAdditionalPay",
-                "openStaticGroup",
-                "openGroupLists",
-                "openTaskProfile"
-            ];
+                var hideIDs = [
+                    "toggleOffCycleGroup",
+                    "toggleTriggerGroup",
+                    "toggleRetrosGroup",
+                    "toggleEcdGroup",
+                    "openRequestTimeAdmin",
+                    "openLeaveReport",
+                    "openAMCalc",
+                    "openProcessMonitor",
+                    "openTLTRStatus",
+                    "openMaintainTimeReporterData",
+                    "openOCOnDemand",
+                    "openClosePayableTime",
+                    "openByPayline",
+                    "openReviewTriggers",
+                    "openTaskGroup",
+                    "openUploadProcess",
+                    "openAbsenceAdjustments",
+                    "openAbsenceEvents",
+                    "openCreateAdditionalPay",
+                    "openStaticGroup",
+                    "openGroupLists",
+                    "openTaskProfile"
+                ];
 
-            for (var i = hideIDs.length - 1; i >= 0; i--) {
-                var nodeParent = document.getElementById(hideIDs[i]).parentNode;
-                nodeParent.removeChild(document.getElementById(hideIDs[i]));
-            };
-        }
-      });
+                for (var i = hideIDs.length - 1; i >= 0; i--) {
+                    var nodeParent = document.getElementById(hideIDs[i]).parentNode;
+                    nodeParent.removeChild(document.getElementById(hideIDs[i]));
+                };
+            }
+        });
     });
 
     // Add event listeners
@@ -90,13 +98,17 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener("keypress", insertEmpID, false);
 
     // Clear localStorage when page action is clicked
-    chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, {scriptAction:"clearStorage"}, function(response) {
-      });
+    chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true
+    }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            scriptAction: "clearStorage"
+        }, function(response) {});
     });
 });
 
-function insertEmpID (e) {
+function insertEmpID(e) {
 
     // If any of the collapsible nodes are displayed then don't do anything
     collapsibleNodes = document.getElementsByClassName("collapsible");
@@ -114,25 +126,25 @@ function insertEmpID (e) {
     }
 
     // If the user typed a digit add it to the empID field
-    if(e.keyCode > 47 && e.keyCode < 58){
+    if (e.keyCode > 47 && e.keyCode < 58) {
         newEmpid.value += (e.keyCode - 48);
     }
 
     // Hide the field if nothing is entered
     if (newEmpid.value === "") {
         newEmpid.style.display = "none";
-    }else{
+    } else {
         newEmpid.style.display = "block";
     }
 
     if (newEmpid.value.length < 6) {
         newEmpid.style.color = "red";
-    }else{
+    } else {
         newEmpid.style.color = "black";
     }
 }
 
-function sendAction(e){
+function sendAction(e) {
 
 
     var requestObject = {
@@ -141,99 +153,106 @@ function sendAction(e){
 
     if (e.type === "contextmenu") {
         e.preventDefault();
-    }else if (e.type === "click") {
+    } else if (e.type === "click") {
         requestObject.pageStay = true;
     }
 
-    chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, {scriptAction: "getSystem"}, function(response) {
+    chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true
+    }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            scriptAction: "getSystem"
+        }, function(response) {
 
-        if (response.system === "core") {
-            var componentNameObj = {
-                "generateTriggers":"TL TR Status",
-                "createAdditionalPay":"Create Additional Pay",
+            if (response.system === "core") {
+                var componentNameObj = {
+                    "generateTriggers": "TL TR Status",
+                    "createAdditionalPay": "Create Additional Pay",
 
-                "openQueryManager":"Query Manager",
-                "openTimesheet":"Timesheet",
-                "openRequestTimeAdmin":"Request Time Administration",
-                "openJobData":"Job Data",
+                    "openQueryManager": "Query Manager",
+                    "openTimesheet": "Timesheet",
+                    "openRequestTimeAdmin": "Request Time Administration",
+                    "openJobData": "Job Data",
 
-                "openReviewPaycheck":"Review Paycheck - USA",
-                "openLeaveReport":"Employee Leave Report",
-                "openAMCalc":"Calculate Absence and Payroll",
-                "openProcessMonitor":"Process Monitor",
+                    "openReviewPaycheck": "Review Paycheck - USA",
+                    "openLeaveReport": "Employee Leave Report",
+                    "openAMCalc": "Calculate Absence and Payroll",
+                    "openProcessMonitor": "Process Monitor",
 
-                "openTLTRStatus":"TL TR Status",
-                "openMaintainTimeReporterData":"Maintain Time Reporter Data",
-                "openOCOnDemand":"Off Cycle On Demand",
-                "openClosePayableTime":"Close Payable Time",
+                    "openTLTRStatus": "TL TR Status",
+                    "openMaintainTimeReporterData": "Maintain Time Reporter Data",
+                    "openOCOnDemand": "Off Cycle On Demand",
+                    "openClosePayableTime": "Close Payable Time",
 
-                "openByPayline":"By Payline",
-                "openReviewTriggers":"Review Triggers",
-                "openTaskGroup":"Taskgroup",
-                "openUploadProcess":"Upload Process",
+                    "openByPayline": "By Payline",
+                    "openReviewTriggers": "Review Triggers",
+                    "openTaskGroup": "Taskgroup",
+                    "openUploadProcess": "Upload Process",
 
-                "openAbsenceAdjustments": "Absences",
-                "openAbsenceEvents": "Absence Event",
-                "openCreateAdditionalPay": "Create Additional Pay",
-                "openTaskProfile": "Task Profile",
+                    "openAbsenceAdjustments": "Absences",
+                    "openAbsenceEvents": "Absence Event",
+                    "openCreateAdditionalPay": "Create Additional Pay",
+                    "openTaskProfile": "Task Profile",
 
-                "openStaticGroup": "Static Group",
-                "openTimeUnion": "Query Manager",
-                "openModifyAPerson": "Modify a Person",
-                "openGroupLists": "Group Lists"
-            };
+                    "openStaticGroup": "Static Group",
+                    "openTimeUnion": "Query Manager",
+                    "openModifyAPerson": "Modify a Person",
+                    "openGroupLists": "Group Lists"
+                };
 
-        }else if (response.system === "admin") {
-            var componentNameObj = {
-                "openJobData":"Add/Update Job",
-                "openQueryManager":"Query Manager",
-                "openTimesheet":"Timesheet",
-                "openAddUpdatePosition": "Add/Update Position",
+            } else if (response.system === "admin") {
+                var componentNameObj = {
+                    "openJobData": "Add/Update Job",
+                    "openQueryManager": "Query Manager",
+                    "openTimesheet": "Timesheet",
+                    "openAddUpdatePosition": "Add/Update Position",
 
-                "openAddAPerson": "Add a Person",
-                "openI9EVerifyHome": "I-9 & E-Verify Homepage",
-                "openModifyAPerson": "Modify a Person",
-                "openReviewPaycheck":"Review Paycheck US",
+                    "openAddAPerson": "Add a Person",
+                    "openI9EVerifyHome": "I-9 & E-Verify Homepage",
+                    "openModifyAPerson": "Modify a Person",
+                    "openReviewPaycheck": "Review Paycheck US",
 
-                "openUpdateEmployeeTaxData": "Update Employee Tax Data US",
-                "openUpdatePayrollOptions": "Update Payroll Options US",
-            };
-        }
-
-        requestObject.componentName = componentNameObj[e.target.id];
-
-        // Add the EmpID to the request object if available
-        if (document.getElementById("newEmpid").value.length === 6) {
-            var typedEmpid = document.getElementById("newEmpid").value;
-            requestObject.empid = typedEmpid;
-            sendToClipboard(typedEmpid);
-
-        }else if (e.target.id === "openTaskGroup" || e.target.id === "openTaskProfile") {
-            if (!!getEmpidFromClipboard("taskgroup")) {
-                requestObject.taskgroup = getEmpidFromClipboard("taskgroup");
+                    "openUpdateEmployeeTaxData": "Update Employee Tax Data US",
+                    "openUpdatePayrollOptions": "Update Payroll Options US",
+                };
             }
 
-        }else if (e.target.id === "openAddUpdatePosition") {
-            if (!!getEmpidFromClipboard("position")) {
-                requestObject.positionNumber = getEmpidFromClipboard("position");
+            requestObject.componentName = componentNameObj[e.target.id];
+
+            // Add the EmpID to the request object if available
+            if (document.getElementById("newEmpid").value.length === 6) {
+                var typedEmpid = document.getElementById("newEmpid").value;
+                requestObject.empid = typedEmpid;
+                sendToClipboard(typedEmpid);
+
+            } else if (e.target.id === "openTaskGroup" || e.target.id === "openTaskProfile") {
+                if (!!getEmpidFromClipboard("taskgroup")) {
+                    requestObject.taskgroup = getEmpidFromClipboard("taskgroup");
+                }
+
+            } else if (e.target.id === "openAddUpdatePosition") {
+                if (!!getEmpidFromClipboard("position")) {
+                    requestObject.positionNumber = getEmpidFromClipboard("position");
+                }
+
+            } else if (!!getEmpidFromClipboard("empid")) {
+                requestObject.empid = getEmpidFromClipboard("empid");
             }
 
-        }else if (!!getEmpidFromClipboard("empid")) {
-            requestObject.empid = getEmpidFromClipboard("empid");
-        }
+            chrome.tabs.query({
+                active: true,
+                currentWindow: true
+            }, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {});
+            });
+            window.close();
 
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
-          });
         });
-        window.close();
-
-      });
     });
 }
 
-function terminateEmployees (e) {
+function terminateEmployees(e) {
 
     if (localStorage.terminationList === undefined) {
         // TODO: Add quick message function to explain why a function doesn't continue
@@ -250,19 +269,21 @@ function terminateEmployees (e) {
     // Set the pageStay based on the contextMenu or click event
     if (e.type === "contextmenu") {
         e.preventDefault();
-    }else if (e.type === "click") {
+    } else if (e.type === "click") {
         requestObject.pageStay = true;
     }
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
-      });
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {});
     });
 
     window.close();
 }
 
-function refreshEmployees (e) {
+function refreshEmployees(e) {
 
     if (localStorage.refreshList === undefined) {
         // TODO: Add quick message function to explain why a function doesn't continue
@@ -279,19 +300,21 @@ function refreshEmployees (e) {
     // Set the pageStay based on the contextMenu or click event
     if (e.type === "contextmenu") {
         e.preventDefault();
-    }else if (e.type === "click") {
+    } else if (e.type === "click") {
         requestObject.pageStay = true;
     }
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
-      });
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {});
     });
 
     window.close();
 }
 
-function updatePositions (e) {
+function updatePositions(e) {
 
     if (localStorage.positionList === undefined) {
         // TODO: Add quick message function to explain why a function doesn't continue
@@ -309,19 +332,21 @@ function updatePositions (e) {
     // Set the pageStay based on the contextMenu or click event
     if (e.type === "contextmenu") {
         e.preventDefault();
-    }else if (e.type === "click") {
+    } else if (e.type === "click") {
         requestObject.pageStay = true;
     }
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
-      });
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {});
     });
 
     window.close();
 }
 
-function generateCheck(e){
+function generateCheck(e) {
 
     var empid = document.getElementById('empid').value;
 
@@ -329,33 +354,35 @@ function generateCheck(e){
 
         // Create object with check data.
         var requestObject = {
-            scriptAction:'generateCheck',
-            componentName:"Create Online Check",
-            empid:document.getElementById('empid').value,
-            subset:document.getElementById('dedsubset').value,
-            manualCheck:document.getElementById('manualCheck').checked
+            scriptAction: 'generateCheck',
+            componentName: "Create Online Check",
+            empid: document.getElementById('empid').value,
+            subset: document.getElementById('dedsubset').value,
+            manualCheck: document.getElementById('manualCheck').checked
         };
 
         // Set the pageStay based on the contextMenu or click event
         if (e.type === "contextmenu") {
             e.preventDefault();
-        }else if (e.type === "click") {
+        } else if (e.type === "click") {
             requestObject.pageStay = true;
         }
 
         // Send message to firstresponse.js with check data.
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
-          });
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        }, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {});
         });
         window.close();
-    }else {
+    } else {
         console.log("Please enter a valid empid before continuing.");
 
     }
 }
 
-function generateRetros (e) {
+function generateRetros(e) {
 
     if (localStorage.retrosList === undefined) {
         // TODO: Add quick message function to explain why a function doesn't continue
@@ -372,19 +399,21 @@ function generateRetros (e) {
     // Set the pageStay based on the contextMenu or click event
     if (e.type === "contextmenu") {
         e.preventDefault();
-    }else if (e.type === "click") {
+    } else if (e.type === "click") {
         requestObject.pageStay = true;
     }
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
-      });
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {});
     });
 
     window.close();
 }
 
-function generateTriggers(e){
+function generateTriggers(e) {
 
     if (localStorage.triggerList === undefined) {
         // TODO: Add quick message function to explain why a function doesn't continue
@@ -405,28 +434,32 @@ function generateTriggers(e){
     // Set the pageStay based on the contextMenu or click event
     if (e.type === "contextmenu") {
         e.preventDefault();
-    }else if (e.type === "click") {
+    } else if (e.type === "click") {
         requestObject.pageStay = true;
     }
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {
-      });
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, requestObject, function(response) {});
     });
 
     window.close();
 }
 
-function generateAdditionalPay(){
+function generateAdditionalPay() {
 
     // Create object with check data.
     var generateAdditionalPayJSON = {
-        scriptAction:'generateAdditionalPay'
+        scriptAction: 'generateAdditionalPay'
     };
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, generateAdditionalPayJSON, function(response) {
-      });
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, generateAdditionalPayJSON, function(response) {});
     });
     window.close();
 }
@@ -441,25 +474,25 @@ function toggleDivs(e) {
 
         var toggleGroup = document.getElementById(e.target.title);
 
-        if (toggleGroup.style.display == "block"){
-          toggleGroup.style.display = "none";
+        if (toggleGroup.style.display == "block") {
+            toggleGroup.style.display = "none";
 
-        }else{
-          toggleGroup.style.display = "block";
-          if (e.target.title !== "offCycleGroup") {
-              toggleGroup.childNodes[1].select();
-          }
+        } else {
+            toggleGroup.style.display = "block";
+            if (e.target.title !== "offCycleGroup") {
+                toggleGroup.childNodes[1].select();
+            }
 
-          // Collapse the other divs
-          var all = document.getElementsByClassName("collapsible");
-          for (var i=0, max=all.length; i < max; i++) {
-              if (all[i].id != e.target.title) {
-                all[i].style.display = "none";
-              }
-          }
+            // Collapse the other divs
+            var all = document.getElementsByClassName("collapsible");
+            for (var i = 0, max = all.length; i < max; i++) {
+                if (all[i].id != e.target.title) {
+                    all[i].style.display = "none";
+                }
+            }
 
         }
-    }else {
+    } else {
         e.stopPropagation();
 
     }
@@ -469,37 +502,37 @@ function toggleDivs(e) {
         var clipboardData = getEmpidFromClipboard("empid");
         if (/^\d+$/.test(clipboardData) && clipboardData.length == 6 || clipboardData.length == 9) {
             document.getElementById('empid').value = clipboardData;
-        }else {
+        } else {
             console.log("Clipboard data does not match empid format.");
         }
     }
 }
 
-function convertString(e){
+function convertString(e) {
     var valueListID = e.target.id;
     var pastedString = document.getElementById(valueListID).value.trim();
 
     if (valueListID === "triggerList") {
         excelToJSONTriggers(pastedString, valueListID);
 
-    }else if (valueListID === "additionalPayList") {
+    } else if (valueListID === "additionalPayList") {
         excelToJSON(pastedString, valueListID);
 
-    }else if (valueListID === "retrosList") {
+    } else if (valueListID === "retrosList") {
         excelToJSONRetros(pastedString, valueListID);
 
-    }else if (valueListID === "refreshList") {
+    } else if (valueListID === "refreshList") {
         excelToJSONRefresh(pastedString, valueListID);
 
-    }else if (valueListID === "positionList") {
+    } else if (valueListID === "positionList") {
         excelToJSONPosition(pastedString, valueListID);
 
-    }else if (valueListID === "terminationList") {
+    } else if (valueListID === "terminationList") {
         excelToJSONTerminations(pastedString, valueListID);
     };
 }
 
-function excelToJSONTerminations(pastedString, valueListID){
+function excelToJSONTerminations(pastedString, valueListID) {
 
     var pastedStringArray = pastedString.split(/[\n\r\t]/g);
 
@@ -507,7 +540,7 @@ function excelToJSONTerminations(pastedString, valueListID){
 
     for (var i = 0; i < pastedStringArray.length; i++) {
         // stepCount should be the remainder when devided by the number of data points for each employee
-        var stepCount = i%6;
+        var stepCount = i % 6;
 
         // Check to see if value is missing on last employee values
         if (stepCount !== 5 && i === pastedStringArray.length) {
@@ -521,26 +554,26 @@ function excelToJSONTerminations(pastedString, valueListID){
             if (/^\d+$/.test(pastedStringArray[i]) && (pastedStringArray[i].length == 6 || pastedStringArray[i].length == 9)) {
                 textToJSON += '{"empid":"' + pastedStringArray[i] + '",';
 
-            }else {
+            } else {
                 console.log("EmpID " + pastedStringArray[i] + " is not in a valid format. Iteration #" + i);
                 return false;
             }
 
-        }else if (stepCount === 1) {// emplRcd
+        } else if (stepCount === 1) { // emplRcd
             textToJSON += '"emplRcd":"' + pastedStringArray[i] + '",';
-        }else if (stepCount === 2) {// termDate
+        } else if (stepCount === 2) { // termDate
             textToJSON += '"termDate":"' + pastedStringArray[i] + '",';
-        }else if (stepCount === 3) {// jobAction
+        } else if (stepCount === 3) { // jobAction
             textToJSON += '"jobAction":"' + pastedStringArray[i] + '",';
-        }else if (stepCount === 4) {// reason
+        } else if (stepCount === 4) { // reason
             textToJSON += '"reason":"' + pastedStringArray[i] + '",';
-        }else if (stepCount === 5) {// rehireElig
+        } else if (stepCount === 5) { // rehireElig
             textToJSON += '"rehireElig":"' + pastedStringArray[i] + '"}'
 
             // If this is the last element in the array add a square bracket, otherwise add a comma
             if ((i + 1) === pastedStringArray.length) {
                 textToJSON += ']'
-            }else {
+            } else {
                 textToJSON += ','
             }
         }
@@ -552,7 +585,7 @@ function excelToJSONTerminations(pastedString, valueListID){
     JSONToTable(JSON.parse(textToJSON), valueListID);
 }
 
-function excelToJSONRefresh(pastedString, valueListID){
+function excelToJSONRefresh(pastedString, valueListID) {
 
     var pastedStringArray = pastedString.split(/[\n\r\t]/g);
 
@@ -560,7 +593,7 @@ function excelToJSONRefresh(pastedString, valueListID){
 
     for (var i = 0; i < pastedStringArray.length; i++) {
         // stepCount should be the remainder when devided by the number of data points for each employee
-        var stepCount = i%5;
+        var stepCount = i % 5;
 
         // Check to see if value is missing on last employee values
         // stepCount should be one less than the data points
@@ -576,24 +609,24 @@ function excelToJSONRefresh(pastedString, valueListID){
             if (/^\d+$/.test(pastedStringArray[i]) && (pastedStringArray[i].length == 6 || pastedStringArray[i].length == 9)) {
                 textToJSON += '{"empid":"' + pastedStringArray[i] + '",';
 
-            }else {
+            } else {
                 console.log("EmpID " + pastedStringArray[i] + " is not in a valid format. Iteration #" + i);
                 return false;
             }
 
-        }else if (stepCount === 1) {// emplRcd
+        } else if (stepCount === 1) { // emplRcd
             textToJSON += '"emplRcd":"' + pastedStringArray[i] + '",';
-        }else if (stepCount === 2) {// termDate
+        } else if (stepCount === 2) { // termDate
             textToJSON += '"effectiveDate":"' + pastedStringArray[i] + '",';
-        }else if (stepCount === 3) {// reason
+        } else if (stepCount === 3) { // reason
             textToJSON += '"reason":"' + pastedStringArray[i] + '",'
-        }else if (stepCount === 4) {// reason
+        } else if (stepCount === 4) { // reason
             textToJSON += '"positionNum":"' + pastedStringArray[i] + '"}'
 
             // If this is the last element in the array add a square bracket, otherwise add a comma
             if ((i + 1) === pastedStringArray.length) {
                 textToJSON += ']'
-            }else {
+            } else {
                 textToJSON += ','
             }
         }
@@ -605,7 +638,7 @@ function excelToJSONRefresh(pastedString, valueListID){
     JSONToTable(JSON.parse(textToJSON), valueListID);
 }
 
-function excelToJSONPosition(pastedString, valueListID){
+function excelToJSONPosition(pastedString, valueListID) {
 
     var pastedStringArray = pastedString.split(/[\n\r\t]/g);
 
@@ -613,7 +646,7 @@ function excelToJSONPosition(pastedString, valueListID){
 
     for (var i = 0; i < pastedStringArray.length; i++) {
         // stepCount should be the remainder when divided by the number of data points for each employee
-        var stepCount = i%4;
+        var stepCount = i % 4;
 
         // Check to see if value is missing on last employee values
         // stepCount should be one less than the data points
@@ -629,22 +662,22 @@ function excelToJSONPosition(pastedString, valueListID){
             if (pastedStringArray[i].length === 3) {
                 textToJSON += '{"reasonCode":"' + pastedStringArray[i] + '",';
 
-            }else {
+            } else {
                 console.log("Reason Code " + pastedStringArray[i] + " is not in a valid format. Iteration #" + i);
                 return false;
             }
 
-        }else if (stepCount === 1) {// positionNumber
+        } else if (stepCount === 1) { // positionNumber
             textToJSON += '"positionNumber":"' + pastedStringArray[i] + '",';
-        }else if (stepCount === 2) {// effectiveDate
+        } else if (stepCount === 2) { // effectiveDate
             textToJSON += '"effectiveDate":"' + pastedStringArray[i] + '",';
-        }else if (stepCount === 3) {// dataPoint
+        } else if (stepCount === 3) { // dataPoint
             textToJSON += '"dataPoint":"' + pastedStringArray[i] + '"}'
 
             // If this is the last element in the array add a square bracket, otherwise add a comma
             if ((i + 1) === pastedStringArray.length) {
                 textToJSON += ']'
-            }else {
+            } else {
                 textToJSON += ','
             }
         }
@@ -656,14 +689,14 @@ function excelToJSONPosition(pastedString, valueListID){
     JSONToTable(JSON.parse(textToJSON), valueListID);
 }
 
-function excelToJSONTriggers(pastedString, valueListID){
+function excelToJSONTriggers(pastedString, valueListID) {
 
     var pastedStringArray = pastedString.replace(/[$]/g, "").split(/[\n\r\t\,]/g);
 
     var textToJSON = '[';
 
     for (var i = 0; i < pastedStringArray.length; i++) {
-        var stepCount = i%3;
+        var stepCount = i % 3;
 
         // Check to see if value is missing on last employee values
         if (stepCount !== 2 && i === pastedStringArray.length) {
@@ -675,23 +708,23 @@ function excelToJSONTriggers(pastedString, valueListID){
         if (stepCount === 0) {
             if (/^\d+$/.test(pastedStringArray[i]) && (pastedStringArray[i].length == 6 || pastedStringArray[i].length == 9)) {
                 textToJSON += '{"empid":"' + pastedStringArray[i] + '",';
-            }else {
+            } else {
                 console.log("EmpID " + pastedStringArray[i] + " is not in a valid format. Iteration #" + i);
                 return false;
             }
 
-        // If this is the second item in the array (emplRcd)
-        }else if (stepCount === 1) {
+            // If this is the second item in the array (emplRcd)
+        } else if (stepCount === 1) {
             textToJSON += '"emplRcd":"' + pastedStringArray[i] + '",';
 
-        // If this is third item in the array (date)
-        }else if (stepCount === 2) {
+            // If this is third item in the array (date)
+        } else if (stepCount === 2) {
             textToJSON += '"triggerDate":"' + pastedStringArray[i] + '"}';
 
             // If this is the last element in the array add a square bracket, otherwise add a comma
             if ((i + 1) === pastedStringArray.length) {
                 textToJSON += ']'
-            }else {
+            } else {
                 textToJSON += ','
             }
         }
@@ -703,14 +736,14 @@ function excelToJSONTriggers(pastedString, valueListID){
     return textToJSON;
 }
 
-function excelToJSONRetros(pastedString, valueListID){
+function excelToJSONRetros(pastedString, valueListID) {
 
     var pastedStringArray = pastedString.replace(/[$]/g, "").split(/[\n\r\t]/g);
 
     var textToJSON = '[';
 
     for (var i = 0; i < pastedStringArray.length; i++) {
-        var stepCount = i%2;
+        var stepCount = i % 2;
 
         // Check to see if value is missing on last employee values
         if (stepCount !== 1 && i === pastedStringArray.length) {
@@ -723,19 +756,19 @@ function excelToJSONRetros(pastedString, valueListID){
             if (/^\d+$/.test(pastedStringArray[i]) && (pastedStringArray[i].length == 6 || pastedStringArray[i].length == 9)) {
                 textToJSON += '{"empid":"' + pastedStringArray[i] + '",';
 
-            }else {
+            } else {
                 console.log("EmpID " + pastedStringArray[i] + " is not in a valid format. Iteration #" + i);
                 return false;
             }
 
-        // If this is an even numbered item (date/amount)
-        }else if (stepCount === 1) {
+            // If this is an even numbered item (date/amount)
+        } else if (stepCount === 1) {
             textToJSON += '"retroAmount":"' + pastedStringArray[i] + '"}'
 
             // If this is the last element in the array add a square bracket, otherwise add a comma
             if ((i + 1) === pastedStringArray.length) {
                 textToJSON += ']'
-            }else {
+            } else {
                 textToJSON += ','
             }
         }
@@ -749,7 +782,7 @@ function excelToJSONRetros(pastedString, valueListID){
     return textToJSON;
 }
 
-function JSONToTable(JSONObject, valueListID){
+function JSONToTable(JSONObject, valueListID) {
 
     var propertiesCount = Object.keys(JSONObject[0]).length
     var objectKeys = Object.keys(JSONObject[0]);
@@ -768,13 +801,13 @@ function JSONToTable(JSONObject, valueListID){
     triggerTable.appendChild(headerRow);
 
     // Generate the cells on the other rows row
-    for (var thisObject in JSONObject){
+    for (var thisObject in JSONObject) {
         if (JSONObject.hasOwnProperty(thisObject)) {
 
             // Create the row node
             var nextRowNode = document.createElement('tr');
 
-            for (thisProperty in JSONObject[thisObject]){
+            for (thisProperty in JSONObject[thisObject]) {
                 if (JSONObject[thisObject].hasOwnProperty(thisProperty)) {
 
                     // Create the cells and add the contents
@@ -796,19 +829,19 @@ function JSONToTable(JSONObject, valueListID){
 
     triggerTable.id = "valueListTable";
     triggerTable.style.width = "100%";
-    valueListNode.parentNode.replaceChild(triggerTable,valueListNode.parentNode.childNodes[1]);
+    valueListNode.parentNode.replaceChild(triggerTable, valueListNode.parentNode.childNodes[1]);
 
-  return;
+    return;
 }
 
-function excelToJSON(pastedString){
+function excelToJSON(pastedString) {
 
     var pastedStringArray = pastedString.replace(/[\n\r\t]/g, ",").split(",");
 
     var textToJSON = '[';
 
     for (var i = 0; i < pastedStringArray.length; i++) {
-        var stepCount = i%3;
+        var stepCount = i % 3;
 
         // Check to see if value is missing on last employee values
         if (stepCount !== 2 && i === pastedStringArray.length) {
@@ -820,19 +853,19 @@ function excelToJSON(pastedString){
             if (/^\d+$/.test(pastedStringArray[i]) && (pastedStringArray[i].length == 6 || pastedStringArray[i].length == 9)) {
                 textToJSON += '{"empid":"' + pastedStringArray[i] + '",';
 
-            }else {
+            } else {
                 console.log("EmpID " + pastedStringArray[i] + " is not in a valid format.");
                 return false;
             }
 
-        }else if (stepCount === 1) {
+        } else if (stepCount === 1) {
             textToJSON += '"earningsCode":"' + pastedStringArray[i] + '",';
 
-        }else if (stepCount === 2) {
+        } else if (stepCount === 2) {
             if ((i + 1) === pastedStringArray.length) {
                 textToJSON += '"dollarAmount":"' + pastedStringArray[i] + '"}]'
 
-            }else {
+            } else {
                 textToJSON += '"dollarAmount":"' + pastedStringArray[i] + '"},'
             }
 
@@ -842,12 +875,12 @@ function excelToJSON(pastedString){
     return JSON.parse(textToJSON);
 }
 
-function stringToTable(pastedString, valueListID){
-  stringToTable = pastedString;
+function stringToTable(pastedString, valueListID) {
+    stringToTable = pastedString;
 
-  var currentCell
-  var earningsTable = document.createElement('table');
-  var headerRow = document.createElement('tr');
+    var currentCell
+    var earningsTable = document.createElement('table');
+    var headerRow = document.createElement('tr');
 
     currentCell = document.createElement('th');
     currentCell.innerHTML = "EmpID";
@@ -861,39 +894,39 @@ function stringToTable(pastedString, valueListID){
     currentCell.innerHTML = "Amount";
     headerRow.appendChild(currentCell);
 
-  earningsTable.appendChild(headerRow);
+    earningsTable.appendChild(headerRow);
 
-  var firstArray = stringToTable.split('\n');
+    var firstArray = stringToTable.split('\n');
 
-  while (firstArray.length > 0) {
-    var currentRow = firstArray.shift().split('\t');
-    var nextRowNode = document.createElement('tr');
+    while (firstArray.length > 0) {
+        var currentRow = firstArray.shift().split('\t');
+        var nextRowNode = document.createElement('tr');
 
-    while (currentRow.length > 0) {
-      currentCell = document.createElement('td');
-      currentCell.innerHTML = currentRow.shift();
-      nextRowNode.appendChild(currentCell);
+        while (currentRow.length > 0) {
+            currentCell = document.createElement('td');
+            currentCell.innerHTML = currentRow.shift();
+            nextRowNode.appendChild(currentCell);
+        }
+        earningsTable.appendChild(nextRowNode);
     }
-    earningsTable.appendChild(nextRowNode);
-  }
 
     // Swap the textbox with the formatted HTML Table
     var valueListNode = document.getElementById(valueListID);
     var valueListParentNode = document.getElementById(valueListID).parentNode;
     console.log(valueListNode);
     earningsTable.id = "valueListTable";
-    valueListNode.parentNode.replaceChild(earningsTable,valueListNode.parentNode.childNodes[1]);
+    valueListNode.parentNode.replaceChild(earningsTable, valueListNode.parentNode.childNodes[1]);
 
-  return;
+    return;
 }
 
-function getEmpidFromClipboard(cbValue){
+function getEmpidFromClipboard(cbValue) {
     var sandbox = document.getElementById('sandbox');
     sandbox.style.display = "block";
     sandbox.value = '';
     sandbox.select();
     if (document.execCommand('paste')) {
-         var clipboardData = sandbox.value.trim();
+        var clipboardData = sandbox.value.trim();
     }
     sandbox.style.display = "none";
     sandbox.value = '';
@@ -902,27 +935,27 @@ function getEmpidFromClipboard(cbValue){
 
         if (/^\d+$/.test(clipboardData) && (clipboardData.length === 6 || clipboardData.length === 9)) {
             return clipboardData;
-        }else {
+        } else {
             return false;
         }
 
-    }else if (cbValue ==="taskgroup") {
+    } else if (cbValue === "taskgroup") {
         if (/^\d+$/.test(clipboardData) && (clipboardData.length === 7)) {
             return clipboardData;
-        }else {
+        } else {
             return false;
         }
 
-    }else if (cbValue ==="position") {
+    } else if (cbValue === "position") {
         if (/^\d+$/.test(clipboardData) && (clipboardData.length === 8)) {
             return clipboardData;
-        }else {
+        } else {
             return false;
         }
     }
 }
 
-function sendToClipboard (stringToClipboard) {
+function sendToClipboard(stringToClipboard) {
     var sandbox = document.getElementById('sandbox');
     sandbox.style.display = "block";
     sandbox.value = stringToClipboard;
