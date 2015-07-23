@@ -204,6 +204,12 @@ function bodyObserver_refreshEmployees (mutations, bodyObserver) {
             }
 
             // Click through message
+            if (checkIframeAndClass("popupText","<br>Warning -- Grade is invalid for salary plan or",false)) {
+                console.log("Clicked OK on Combined FTE warning");
+                document.getElementById("#ICOK").click();
+            }
+
+            // Click through message
             if (checkIframeAndClass("popupText","<br>Warning -- Benefit System not unique for curre",false)) {
                 console.log("Clicked OK on Benefit System warning");
                 document.getElementById("#ICOK").click();

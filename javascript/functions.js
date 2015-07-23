@@ -829,6 +829,19 @@ function addNewRowRefresh() {
             clearInterval(waitForJobData);
 
             setTimeout(function() {
+
+                // Check to see if the effectiveDate field is effSeq
+                if (JSON.parse(localStorage.thisRefresh).effectiveDate === "effSeq") {
+                    // Create a new object variable with the current localStorage.thisRefresh object
+                    var thisRefresh = JSON.parse(localStorage.thisRefresh);
+                    // Add the effSeq property set to the current effective sequence + 1
+                    thisRefresh.effSeq = Number(psIframe.getElementById("JOB_EFFSEQ$0").value) + 1
+                        // Update the effectiveDate to reflect the effective date of the current
+                    thisRefresh.effectiveDate = psIframe.getElementById("JOB_EFFDT$0").value
+                        // Reset the localStorage.thisRefresh variable to include the effective sequence and new effectiveDate
+                    localStorage.thisRefresh = JSON.stringify(thisRefresh);
+                }
+
                 psIframe.getElementById("$ICField12$new$0$$0").click();
 
                 console.log("calling addRefreshValues")
@@ -858,6 +871,12 @@ function addRefreshValues() {
             psIframe.getElementById("JOB_EFFDT$0").value = JSON.parse(localStorage.thisRefresh).effectiveDate;
             psIframe.getElementById("JOB_EFFDT$0").dispatchEvent(changeEvent);
 
+            // Set the effective sequence if necessary
+            if (JSON.parse(localStorage.thisRefresh).effSeq !== undefined) {
+                psIframe.getElementById("JOB_EFFSEQ$0").value = JSON.parse(localStorage.thisRefresh).effSeq;
+                psIframe.getElementById("JOB_EFFSEQ$0").dispatchEvent(changeEvent);
+            }
+
             // Set action
             psIframe.getElementById("JOB_ACTION$0").value = "POS";
             psIframe.getElementById("JOB_ACTION$0").dispatchEvent(changeEvent);
@@ -873,14 +892,14 @@ function addRefreshValues() {
                     console.log("Calling refreshPosition");
 
                     // Call setRehireData function
-                    refreshPosition();
+                    lookForModal();
                 }
             }, 200)
         }
     }, 300)
 }
 
-function refreshPosition() {
+function lookForModal() {
 
     // Set the iframe variable
     var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -889,54 +908,68 @@ function refreshPosition() {
 
     var waitForModal = setInterval(function() {
 
-        if (!!document.getElementById("ptModFrame_0")) {
+        for (var i = 0; i < 5; i++) {
+            var modalID = "ptModFrame_" + i;
+            if (!!document.getElementById(modalID)) {
 
-            // Stop the interval
-            clearInterval(waitForModal);
+                // Call the refreshPosition function with the correct modalID
+                refreshPosition(modalID);
 
-            var modal = document.getElementById("ptModFrame_0").contentDocument;
+                // Stop the interval
+                clearInterval(waitForModal);
 
-            var waitForPosition = setInterval(function() {
-
-                console.log("Checking for position number field");
-                var modal = document.getElementById("ptModFrame_0").contentDocument;
-
-                if (!!modal.getElementById("POSN_DATA_VW_POSITION_NBR")) {
-                    clearInterval(waitForPosition);
-
-                    // Enter the position number
-                    modal.getElementById("POSN_DATA_VW_POSITION_NBR").value = JSON.parse(localStorage.thisRefresh).positionNum;
-
-                    // Search for the position
-                    modal.getElementById("#ICSearch").click();
-
-                    var waitForSearch = setInterval(function() {
-
-                        if (!modal.getElementById("RESULT0$1")) {
-
-                            clearInterval(waitForSearch);
-
-                            setTimeout(function() {
-
-                                // Select the first search result
-                                modal.getElementById("SEARCH_RESULT1").click();
-
-                                setTimeout(function() {
-                                    // Select the first search result
-                                    psIframe.getElementById("#ICSave").click();
-
-                                    startMutationWatchingIframe();
-                                    startMutationWatchingBody();
-
-                                }, 500)
-
-                            }, 500)
-                        }
-                    })
-                }
-            }, 300)
+                break; // Dont continue looking for modal.
+            }
         }
-    })
+    }, 500)
+}
+
+// refreshPosition
+function refreshPosition(modalID) {
+
+    // Set the iframe and modal variables
+    var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+    var modal = document.getElementById(modalID).contentDocument;
+
+    var waitForPosition = setInterval(function() {
+
+        console.log("Checking for position number field");
+        var modal = document.getElementById(modalID).contentDocument;
+
+        if (!!modal.getElementById("POSN_DATA_VW_POSITION_NBR")) {
+            clearInterval(waitForPosition);
+
+            // Enter the position number
+            modal.getElementById("POSN_DATA_VW_POSITION_NBR").value = JSON.parse(localStorage.thisRefresh).positionNum;
+
+            // Search for the position
+            modal.getElementById("#ICSearch").click();
+
+            var waitForSearch = setInterval(function() {
+
+                if (!modal.getElementById("RESULT0$1")) {
+
+                    clearInterval(waitForSearch);
+
+                    setTimeout(function() {
+
+                        // Select the first search result
+                        modal.getElementById("SEARCH_RESULT1").click();
+
+                        setTimeout(function() {
+                            // Select the first search result
+                            psIframe.getElementById("#ICSave").click();
+
+                            startMutationWatchingIframe();
+                            startMutationWatchingBody();
+
+                        }, 500)
+
+                    }, 500)
+                }
+            }, 500)
+        }
+    }, 300)
 }
 
 // Update Position Data

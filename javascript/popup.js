@@ -295,7 +295,7 @@ function updatePositions (e) {
 
     if (localStorage.positionList === undefined) {
         // TODO: Add quick message function to explain why a function doesn't continue
-        console.log("localStorage.positionList is undefined : ", localStorage.refreshList)
+        console.log("localStorage.positionList is undefined : ", localStorage.positionList)
         return false;
     };
 
