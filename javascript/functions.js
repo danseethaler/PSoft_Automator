@@ -1038,6 +1038,27 @@ function addNewPositionRow() {
             return;
         }
 
+        // Get the effective date of the most recent row
+        var currentEffDate = psIframe.getElementById("POSITION_DATA_EFFDT$0").value.split("/");
+        currentEffDate = new Date(currentEffDate[2],Number(currentEffDate[0])-1,currentEffDate[1]);
+
+        // Create date value for new effective date
+        var newEffDate = JSON.parse(localStorage.thisPosition).effectiveDate.split('/');
+        newEffDate = new Date(newEffDate[2],Number(newEffDate[0])-1,newEffDate[1]);
+
+        // See if that date is greater than or equal to the new effective date
+        if (currentEffDate >= newEffDate) {
+            newEffDate.setTime(currentEffDate.getTime() + 86400000);
+        }
+
+        month = newEffDate.getMonth() + 1;
+        day = newEffDate.getDate();
+        year = newEffDate.getFullYear();
+
+        var thisPosition = JSON.parse(localStorage.thisPosition)
+        thisPosition.effectiveDate = month + '/' + day +'/' + year;
+        localStorage.thisPosition = JSON.stringify(thisPosition);
+debugger;
         // Make sure the plus button exists and click it
         if (!!psIframe.getElementById("$ICField3$new$0$$0")) {
             clearInterval(waitForPositionData);
@@ -1102,7 +1123,16 @@ function updateDataPoint() {
     // Set the iframe variable
     var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
+    // Update Reports To Field
     if (reasonCode === "UPD") {
+        psIframe.getElementById('POSITION_DATA_REPORTS_TO$0').value = dataPoint;
+        psIframe.getElementById("POSITION_DATA_REPORTS_TO$0").dispatchEvent(changeEvent);
+
+        // Click save
+        psIframe.getElementById("#ICSave").click();
+
+        startMutationWatchingIframe();
+        startMutationWatchingBody();
 
     }
 

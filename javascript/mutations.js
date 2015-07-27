@@ -1,11 +1,15 @@
-
-function startMutationWatchingBody(){
+function startMutationWatchingBody() {
 
     // configuration of the observer:
-    var config = { attributes: true, childList: true, characterData: true, subtree:true };
+    var config = {
+        attributes: true,
+        childList: true,
+        characterData: true,
+        subtree: true
+    };
 
     var bodyObserver = new MutationObserver(function(mutations, bodyObserver) {
-        var scriptObserveFunction =  "bodyObserver_" + localStorage.scriptAction
+        var scriptObserveFunction = "bodyObserver_" + localStorage.scriptAction
 
         if (typeof window[scriptObserveFunction] == 'function') {
             window[scriptObserveFunction](mutations, bodyObserver);
@@ -16,13 +20,18 @@ function startMutationWatchingBody(){
     bodyObserver.observe(document.body, config);
 }
 
-function startMutationWatchingIframe () {
+function startMutationWatchingIframe() {
 
     // configuration of the observer:
-    var config = { attributes: true, childList: true, characterData: true, subtree:true };
+    var config = {
+        attributes: true,
+        childList: true,
+        characterData: true,
+        subtree: true
+    };
 
     var iframeObserver = new MutationObserver(function(mutations) {
-        var scriptObserveFunction =  "iframeObserver_" + localStorage.scriptAction
+        var scriptObserveFunction = "iframeObserver_" + localStorage.scriptAction
 
         if (typeof window[scriptObserveFunction] === "function") {
             window[scriptObserveFunction](mutations, iframeObserver);
@@ -34,7 +43,7 @@ function startMutationWatchingIframe () {
     iframeObserver.observe(document.getElementById("ptifrmtgtframe").contentDocument, config)
 }
 
-function bodyObserver_generateRetros (mutations, bodyObserver) {
+function bodyObserver_generateRetros(mutations, bodyObserver) {
 
     if (localStorage.scriptAction === undefined || !!document.getElementById("ptifrmtgtframe").contentDocument.getElementById("PAY_LINE_WORK_EMPLID")) {
         bodyObserver.disconnect();
@@ -45,34 +54,34 @@ function bodyObserver_generateRetros (mutations, bodyObserver) {
     for (var i = 0; i < mutations.length; i++) {
 
         // Check for modal popup
-        if (mutations[i].target.id.substring(0,6) === "ptMod_") {
+        if (mutations[i].target.id.substring(0, 6) === "ptMod_") {
 
             // Click through no hourly rate error
-            if (checkIframeAndClass("popupText","<br>Warning -- Regular or O/T Hours entered and no",false)) {
+            if (checkIframeAndClass("popupText", "<br>Warning -- Regular or O/T Hours entered and no", false)) {
                 console.log("Clicked OK on no pay rate specified warning");
                 document.getElementById("#ICOK").click();
 
-            // Click through other no hourly rate error
-            }else if (checkIframeAndClass("popupText","<br>Warning -- Other Earnings Hours entered and no",false)) {
+                // Click through other no hourly rate error
+            } else if (checkIframeAndClass("popupText", "<br>Warning -- Other Earnings Hours entered and no", false)) {
                 console.log("Clicked OK on both hours and dollar amount warning");
                 document.getElementById("#ICOK").click();
 
-            // Click through both hours and dollar amount entered warning
-            }else if (checkIframeAndClass("popupText","<br>Warning -- Both Other Hours and Other Pay ente",false)) {
+                // Click through both hours and dollar amount entered warning
+            } else if (checkIframeAndClass("popupText", "<br>Warning -- Both Other Hours and Other Pay ente", false)) {
                 console.log("Clicked OK on both hours and dollar amount warning");
                 document.getElementById("#ICOK").click();
 
-            // If page has not yet saved
-            }else if (checkIframeAndClass("popupText","You have unsaved data on this page. Click OK to go",false)) {
+                // If page has not yet saved
+            } else if (checkIframeAndClass("popupText", "You have unsaved data on this page. Click OK to go", false)) {
                 if (!!document.getElementsByClassName("popupText")[1]) {
-                   // Log the message
+                    // Log the message
                     console.log("Unidentified error : ", document.getElementsByClassName("popupText")[1].innerHTML);
                 }
 
-            }else{
+            } else {
 
                 if (!!document.getElementsByClassName("popupText")[1]) {
-                   // Log the message
+                    // Log the message
                     console.log("Unidentified error : ", document.getElementsByClassName("popupText")[1].innerHTML);
                 }
             }
@@ -81,7 +90,7 @@ function bodyObserver_generateRetros (mutations, bodyObserver) {
     }
 }
 
-function bodyObserver_terminateEmployees (mutations, bodyObserver) {
+function bodyObserver_terminateEmployees(mutations, bodyObserver) {
 
     if (localStorage.scriptAction === undefined || !!document.getElementById("ptifrmtgtframe").contentDocument.getElementById("EMPLMT_SRCH_COR_EMPLID")) {
         bodyObserver.disconnect();
@@ -92,37 +101,37 @@ function bodyObserver_terminateEmployees (mutations, bodyObserver) {
     for (var i = 0; i < mutations.length; i++) {
 
         // Check for modal popup
-        if (mutations[i].target.id.substring(0,6) === "ptMod_") {
+        if (mutations[i].target.id.substring(0, 6) === "ptMod_") {
 
             // Click through message
-            if (checkIframeAndClass("popupText","<br>Warning -- Grade is invalid for salary plan or",false)) {
+            if (checkIframeAndClass("popupText", "<br>Warning -- Grade is invalid for salary plan or", false)) {
                 console.log("Clicked OK on Grade is invalid warning");
                 document.getElementById("#ICOK").click();
 
-            // Click through message
-            }else if (checkIframeAndClass("popupText","<br>Warning -- The employee's HR primary job (as d",false)) {
+                // Click through message
+            } else if (checkIframeAndClass("popupText", "<br>Warning -- The employee's HR primary job (as d", false)) {
                 console.log("Clicked OK on employee's primary job is terminated warning");
                 document.getElementById("#ICOK").click();
 
-            // Click through message
-            }else if (checkIframeAndClass("popupText","<br>Warning -- Benefit System not unique for curre",false)) {
+                // Click through message
+            } else if (checkIframeAndClass("popupText", "<br>Warning -- Benefit System not unique for curre", false)) {
                 console.log("Clicked OK on Benefit System not unique for current Jobs warning");
                 document.getElementById("#ICOK").click();
 
-            // Click through message
-            }else if (checkIframeAndClass("popupText","<br>Warning -- date out of range. (15,9) <br><br>T",false)) {
+                // Click through message
+            } else if (checkIframeAndClass("popupText", "<br>Warning -- date out of range. (15,9) <br><br>T", false)) {
                 console.log("Clicked OK on Date Out of Range warning");
                 document.getElementById("#ICOK").click();
 
-            // Click through message
-            }else if (checkIframeAndClass("popupText","<br>Warning -- Probation Date must be later than H",false)) {
+                // Click through message
+            } else if (checkIframeAndClass("popupText", "<br>Warning -- Probation Date must be later than H", false)) {
                 console.log("Clicked OK on Probation Date must be later than Hire date warning");
                 document.getElementById("#ICOK").click();
 
-            }else{
+            } else {
 
                 if (!!document.getElementsByClassName("popupText")[1]) {
-                   // Log the message
+                    // Log the message
                     console.log("Unidentified error : ", document.getElementsByClassName("popupText")[1].innerHTML);
                 }
             }
@@ -130,12 +139,12 @@ function bodyObserver_terminateEmployees (mutations, bodyObserver) {
     }
 }
 
-function iframeObserver_terminateEmployees (mutations, iframeObserver) {
+function iframeObserver_terminateEmployees(mutations, iframeObserver) {
     // Loop through all the changes
     for (var i = 0; i < mutations.length; i++) {
 
         // Check if there's a change for the SAVED_win0
-        if (mutations[i].target.id === "SAVED_win0"){
+        if (mutations[i].target.id === "SAVED_win0") {
 
             // Set the iframe variable
             var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -151,7 +160,7 @@ function iframeObserver_terminateEmployees (mutations, iframeObserver) {
 
 
                 // If the search field shows up and this code is still running the link didn't initiate a page reload
-                var lookingForSearchNode = setInterval(function(){
+                var lookingForSearchNode = setInterval(function() {
 
                     // Set the iframe variable
                     var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -164,14 +173,14 @@ function iframeObserver_terminateEmployees (mutations, iframeObserver) {
                         // Call pageReady()
                         pageReady();
                     };
-                },700);
+                }, 700);
                 return;
             }
         }
     }
 }
 
-function bodyObserver_refreshEmployees (mutations, bodyObserver) {
+function bodyObserver_refreshEmployees(mutations, bodyObserver) {
 
     // If the search field exists there's no longer a need to observe body mutations
     if (!!document.getElementById("ptifrmtgtframe").contentDocument.getElementById("EMPLMT_SRCH_COR_EMPLID")) {
@@ -183,41 +192,41 @@ function bodyObserver_refreshEmployees (mutations, bodyObserver) {
     for (var i = 0; i < mutations.length; i++) {
 
         // Check for modal popup
-        if (mutations[i].target.id.substring(0,6) === "ptMod_") {
+        if (mutations[i].target.id.substring(0, 6) === "ptMod_") {
 
             // Click through message
-            if (checkIframeAndClass("popupText","<br>Note: The corresponding Church Service Call in",false)) {
+            if (checkIframeAndClass("popupText", "<br>Note: The corresponding Church Service Call in", false)) {
                 console.log("Clicked OK on corresponding Church Service warning");
                 document.getElementById("#ICOK").click();
             }
 
             // Click through message
-            if (checkIframeAndClass("popupText","<br>Warning -- Head count of 2 exceeds maximum hea",false)) {
+            if (checkIframeAndClass("popupText", "<br>Warning -- Head count of 2 exceeds maximum hea", false)) {
                 console.log("Clicked OK on Head Count warning");
                 document.getElementById("#ICOK").click();
             }
 
             // Click through message
-            if (checkIframeAndClass("popupText","<br>Warning -- Combined FTE of active jobs for emp",false)) {
+            if (checkIframeAndClass("popupText", "<br>Warning -- Combined FTE of active jobs for emp", false)) {
                 console.log("Clicked OK on Combined FTE warning");
                 document.getElementById("#ICOK").click();
             }
 
             // Click through message
-            if (checkIframeAndClass("popupText","<br>Warning -- Grade is invalid for salary plan or",false)) {
+            if (checkIframeAndClass("popupText", "<br>Warning -- Grade is invalid for salary plan or", false)) {
                 console.log("Clicked OK on Combined FTE warning");
                 document.getElementById("#ICOK").click();
             }
 
             // Click through message
-            if (checkIframeAndClass("popupText","<br>Warning -- Benefit System not unique for curre",false)) {
+            if (checkIframeAndClass("popupText", "<br>Warning -- Benefit System not unique for curre", false)) {
                 console.log("Clicked OK on Benefit System warning");
                 document.getElementById("#ICOK").click();
 
-            }else{
+            } else {
 
                 if (!!document.getElementsByClassName("popupText")[1]) {
-                   // Log the message
+                    // Log the message
                     console.log("Unidentified error : ", document.getElementsByClassName("popupText")[1].innerHTML);
                 }
             }
@@ -225,12 +234,12 @@ function bodyObserver_refreshEmployees (mutations, bodyObserver) {
     }
 }
 
-function iframeObserver_refreshEmployees (mutations, iframeObserver) {
+function iframeObserver_refreshEmployees(mutations, iframeObserver) {
     // Loop through all the changes
     for (var i = 0; i < mutations.length; i++) {
 
         // Check if there's a change for the SAVED_win0
-        if (mutations[i].target.id === "SAVED_win0"){
+        if (mutations[i].target.id === "SAVED_win0") {
 
             // Set the iframe variable
             var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -246,7 +255,7 @@ function iframeObserver_refreshEmployees (mutations, iframeObserver) {
 
 
                 // If the search field shows up and this code is still running the link didn't initiate a page reload
-                var lookingForSearchNode = setInterval(function(){
+                var lookingForSearchNode = setInterval(function() {
 
                     // Set the iframe variable
                     var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
@@ -259,14 +268,14 @@ function iframeObserver_refreshEmployees (mutations, iframeObserver) {
                         // Call pageReady()
                         pageReady();
                     };
-                },700);
+                }, 700);
                 return;
             }
         }
     }
 }
 
-function bodyObserver_updatePositions (mutations, bodyObserver) {
+function bodyObserver_updatePositions(mutations, bodyObserver) {
 
     if (localStorage.scriptAction === undefined || !!document.getElementById("ptifrmtgtframe").contentDocument.getElementById("EMPLMT_SRCH_COR_EMPLID")) {
         bodyObserver.disconnect();
@@ -277,26 +286,36 @@ function bodyObserver_updatePositions (mutations, bodyObserver) {
     for (var i = 0; i < mutations.length; i++) {
 
         // Check for modal popup
-        if (mutations[i].target.id.substring(0,6) === "ptMod_") {
+        if (mutations[i].target.id.substring(0, 6) === "ptMod_") {
 
             // Click through message
-            if (checkIframeAndClass("popupText","<br>The incumbent update has changed the Salary Pl",false)) {
-                console.log("Clicked OK on corresponding Salary Plan Warning Message");
+            if (checkIframeAndClass("popupText", "<br>The incumbent update has changed the Salary Pl", false)) {
+              console.log("Clicked OK on corresponding Salary Plan Warning Message");
                 document.getElementById("#ICOK").click();
 
                 // Call the returnToSearch() function after the call stack clears.
-                setTimeout(function(){
+                setTimeout(function() {
                     returnToSearch();
                 });
 
-            }else if (checkIframeAndClass("popupText","<br>Warning -- Probation Date must be later than H",false)) {
+                // Click through message
+            } else if (checkIframeAndClass("popupText", "<br>Note: The corresponding Church Service Call in", false)) {
+                console.log("Clicked OK on corresponding Church Service message");
+                document.getElementById("#ICOK").click();
+
+                // Call the returnToSearch() function after the call stack clears.
+                setTimeout(function() {
+                    returnToSearch();
+                });
+
+            } else if (checkIframeAndClass("popupText", "<br>Warning -- Probation Date must be later than H", false)) {
                 console.log("Clicked OK on Probation Date Warning");
                 document.getElementById("#ICOK").click();
 
-            }else{
+            } else {
 
                 if (!!document.getElementsByClassName("popupText")[1]) {
-                   // Log the message
+                    // Log the message
                     console.log("Unidentified error : ", document.getElementsByClassName("popupText")[1].innerHTML);
                 }
             }
@@ -351,14 +370,14 @@ function returnToSearch() {
     }, 700);
 }
 
-function bodyObserver_openJobData(mutations, bodyObserver){
+function bodyObserver_openJobData(mutations, bodyObserver) {
     console.log("fired bodyObserver_openJobData");
     if (localStorage.scriptAction === undefined) {
         bodyObserver.disconnect();
         return false;
     }
 
-    if (checkIframeAndID("win0divPAGECONTAINER","indexOf","No matching values were found.")) {
+    if (checkIframeAndID("win0divPAGECONTAINER", "indexOf", "No matching values were found.")) {
 
         // Clear storage and observers
         bodyObserver.disconnect();
@@ -366,7 +385,7 @@ function bodyObserver_openJobData(mutations, bodyObserver){
     }
 
     if (checkIframeAndID("win0divPSPANELTABLINKS")) {
-        checkIframeAndClass("PSHYPERLINK","TL Employee Data")
+        checkIframeAndClass("PSHYPERLINK", "TL Employee Data")
         console.log("Clearing Storage: search completed for job data.")
 
         // Clear storage and observers
@@ -375,7 +394,7 @@ function bodyObserver_openJobData(mutations, bodyObserver){
     }
 }
 
-function bodyObserver_openByPayline(mutations, bodyObserver){
+function bodyObserver_openByPayline(mutations, bodyObserver) {
     console.log("fired bodyObserver_openByPayline");
     if (localStorage.scriptAction === undefined) {
         bodyObserver.disconnect();
@@ -383,44 +402,44 @@ function bodyObserver_openByPayline(mutations, bodyObserver){
         return false;
     }
 
-    if (checkIframeAndClass("PSSRCHINSTRUCTIONS","No matching values were found.")) {
+    if (checkIframeAndClass("PSSRCHINSTRUCTIONS", "No matching values were found.")) {
 
         iframeObserver.disconnect();
         bodyObserver.disconnect();
 
 
         console.log("Check Canada?");
-        quickMessage("There is no result for this search.","Try Canada?")
+        quickMessage("There is no result for this search.", "Try Canada?")
     }
 }
 
-function bodyObserver_generateCheck(mutations, bodyObserver){
+function bodyObserver_generateCheck(mutations, bodyObserver) {
 
     if (localStorage.scriptAction === undefined && forceContinue !== true) {
         iframeObserver.disconnect();
         return false;
     }
 
-    if (checkIframeAndClass("popupText","<br>Do you wish to use the paysheet creation proce",false)){
+    if (checkIframeAndClass("popupText", "<br>Do you wish to use the paysheet creation proce", false)) {
 
         // If manual check then click don't create a payline
         if (localStorage.manualCheck === "true") {
             waitForSaveAndCalc();
             document.getElementById('#ICNo').click();
 
-        // If not manual check then click create a payline
-        }else if (localStorage.manualCheck === "false") {
+            // If not manual check then click create a payline
+        } else if (localStorage.manualCheck === "false") {
             document.getElementById('#ICYes').click();
         }
 
         console.log("Clicked first popup");
 
-    }else if (checkIframeAndClass("popupText","<br>Would you like the process to Load available T",false)) {
+    } else if (checkIframeAndClass("popupText", "<br>Would you like the process to Load available T", false)) {
         document.getElementById('#ICYes').click();
         console.log("Clicked second popup");
 
-    }else if (checkIframeAndClass("PSSRCHTITLE","Filter Options")) {
-        checkIframeAndID("PAY_OL_WRK_OK_PB$0","click");
+    } else if (checkIframeAndClass("PSSRCHTITLE", "Filter Options")) {
+        checkIframeAndID("PAY_OL_WRK_OK_PB$0", "click");
         console.log("Clicked filter options OK");
 
         waitForPayline();
@@ -429,7 +448,7 @@ function bodyObserver_generateCheck(mutations, bodyObserver){
     }
 }
 
-function initAMTriggersProcessing () {
+function initAMTriggersProcessing() {
 
     localStorage.scriptAction = "generateAMTriggers";
     localStorage.componentName = "Review Triggers";
@@ -438,7 +457,7 @@ function initAMTriggersProcessing () {
     openNewWin(localStorage.componentName);
 }
 
-function bodyObserver_generateAMTriggers (mutations) {
+function bodyObserver_generateAMTriggers(mutations) {
     for (var i = 0; i < mutations.length; i++) {
 
         // If an alert message pops up
@@ -448,15 +467,15 @@ function bodyObserver_generateAMTriggers (mutations) {
             document.getElementById("#ALERTOK").click();
 
             // Try to return to search list again in 300 ms
-            setTimeout(function(){
+            setTimeout(function() {
                 var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
                 psIframe.getElementById("#ICList").click()
-            },300);
+            }, 300);
         }
     }
 }
 
-function iframeObserver_generateAMTriggers (mutations, iframeObserver) {
+function iframeObserver_generateAMTriggers(mutations, iframeObserver) {
 
     var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
@@ -498,7 +517,7 @@ function iframeObserver_generateAMTriggers (mutations, iframeObserver) {
         psIframe.getElementById("GP_RTO_TRGR$new$0$$0").click();
 
         // Wait for the new row to exists
-        var waitingForCountryField = setInterval(function(){
+        var waitingForCountryField = setInterval(function() {
 
             // Set the values
             if (!!psIframe.getElementById("GP_RTO_TRGR_VW_COUNTRY$1")) {
@@ -515,6 +534,6 @@ function iframeObserver_generateAMTriggers (mutations, iframeObserver) {
                 saveAndReturn(400);
 
             }
-        },300);
+        }, 300);
     }
 }
