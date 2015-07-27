@@ -281,7 +281,7 @@ function bodyObserver_updatePositions (mutations, bodyObserver) {
 
             // Click through message
             if (checkIframeAndClass("popupText","<br>The incumbent update has changed the Salary Pl",false)) {
-                console.log("Clicked OK on corresponding Church Service warning");
+                console.log("Clicked OK on corresponding Salary Plan Warning Message");
                 document.getElementById("#ICOK").click();
 
                 // Call the returnToSearch() function after the call stack clears.
