@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector("#main").addEventListener("click", toggleDivs, false);
 
     document.querySelector('#triggerList').addEventListener('change', convertString, false);
+    document.querySelector('#ecdList').addEventListener('change', convertString, false);
     document.querySelector('#retrosList').addEventListener('change', convertString, false);
     document.querySelector('#terminationList').addEventListener('change', convertString, false);
     document.querySelector('#refreshList').addEventListener('change', convertString, false);
@@ -79,6 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector("#generateCheck").addEventListener("contextmenu", generateCheck, false);
     document.querySelector("#generateTriggers").addEventListener("click", generateTriggers, false);
     document.querySelector("#generateTriggers").addEventListener("contextmenu", generateTriggers, false);
+    document.querySelector("#generateECDs").addEventListener("click", generateECDs, false);
+    document.querySelector("#generateECDs").addEventListener("contextmenu", generateECDs, false);
     document.querySelector("#generateRetros").addEventListener("click", generateRetros, false);
     document.querySelector("#generateRetros").addEventListener("contextmenu", generateRetros, false);
     document.querySelector("#terminateEmployees").addEventListener("click", terminateEmployees, false);
@@ -512,7 +515,7 @@ function convertString(e) {
     var valueListID = e.target.id;
     var pastedString = document.getElementById(valueListID).value.trim();
 
-    if (valueListID === "triggerList") {
+    if (valueListID === "triggerList" || valueListID === "ecdList") {
         excelToJSONTriggers(pastedString, valueListID);
 
     } else if (valueListID === "additionalPayList") {

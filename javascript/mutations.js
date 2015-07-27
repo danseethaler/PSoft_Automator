@@ -304,29 +304,27 @@ function bodyObserver_updatePositions (mutations, bodyObserver) {
     }
 }
 
-function iframeObserver_updatePositions (mutations, iframeObserver) {
+function iframeObserver_updatePositions(mutations, iframeObserver) {
     // Loop through all the changes
     for (var i = 0; i < mutations.length; i++) {
 
         // Check if there's a change for the SAVED_win0
-        if (mutations[i].target.id === "SAVED_win0"){
+        if (mutations[i].target.id === "SAVED_win0") {
 
             // Set the iframe variable
             var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
-            // If the style of the SAVED_win0 === block --> the page has been saved
-            if (psIframe.getElementById("SAVED_win0").style.display === "block" && psIframe.getElementById("ptStatusText_win0").innerHTML === "Saved") {
+            // Disconnect the iframeObserver
+            iframeObserver.disconnect();
 
-                // Disconnect the iframeObserver
-                iframeObserver.disconnect();
+            console.log('SAVED_win0 mutation - caling returnToSearch() function');
+            // Call the returnToSearch() function after the call stack clears.
+            setTimeout(function() {
+                returnToSearch();
+            });
 
-                // Call the returnToSearch() function after the call stack clears.
-                setTimeout(function(){
-                    returnToSearch();
-                });
+            return;
 
-                return;
-            }
         }
     }
 }

@@ -43,18 +43,18 @@
         </div>
 
         <button class="nav" id="toggleEcdGroup" title="ecdGroup">Set EChange Dates</button>
-        <button class="nav" id="toggleTriggerGroup" title="triggerGroup">Generate Triggers</button>
+        <button class="nav" id="toggleTriggerGroup" title="triggerGroup">Generate AM Triggers</button>
 
         <!-- Earliest change date list -->
         <div id="ecdGroup" class="collapsible">
-            <textarea id="ecdList" placeholder="Paste ECD Values Here  Format is (EmpID, EC Date)"></textarea>
+            <textarea id="ecdList" placeholder="Paste ECD Values Here  Format is (EmpID, EmplRcd, EC Date)"></textarea>
             <button class="scriptButton" id="generateECDs">Set EC Dates</button>
 
         </div>
 
         <!-- AM Retro Triggers -->
         <div id="triggerGroup" class="collapsible">
-            <textarea id="triggerList" placeholder="Paste Trigger Values Here  Format is (EmpID, EC Date)"></textarea>
+            <textarea id="triggerList" placeholder="Paste Trigger Values Here  Format is (EmpID, EmplRcd, EC Date)"></textarea>
             <button class="scriptButton" id="generateTriggers">Generate AM Triggers</button>
 
         </div>
