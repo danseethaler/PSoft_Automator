@@ -223,6 +223,11 @@ function bodyObserver_refreshEmployees(mutations, bodyObserver) {
                 console.log("Clicked OK on Benefit System warning");
                 document.getElementById("#ICOK").click();
 
+            }
+                // Click through message
+                if (checkIframeAndClass("popupText", "<br>Warning -- Employee Directly Tipped Status dev", false)) {
+                    console.log("Clicked OK on Employee Directly Tipped warning");
+                    document.getElementById("#ICOK").click();
             } else {
 
                 if (!!document.getElementsByClassName("popupText")[1]) {
@@ -310,6 +315,10 @@ function bodyObserver_updatePositions(mutations, bodyObserver) {
 
             } else if (checkIframeAndClass("popupText", "<br>Warning -- Probation Date must be later than H", false)) {
                 console.log("Clicked OK on Probation Date Warning");
+                document.getElementById("#ICOK").click();
+
+            } else if (checkIframeAndClass("popupText", "<br>Warning -- Position ' + JSON.parse(localStorage.thisPosition).dataPoint + ' has over 84 subor", false)) {
+                console.log("Clicked OK on the over 84 subordinates warning");
                 document.getElementById("#ICOK").click();
 
             } else {
