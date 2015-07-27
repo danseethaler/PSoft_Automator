@@ -281,10 +281,10 @@ function bodyObserver_updatePositions (mutations, bodyObserver) {
 
             // Click through message
             if (checkIframeAndClass("popupText","<br>The incumbent update has changed the Salary Pl",false)) {
-                console.log("Clicked OK on corresponding Church Service warning");
+                console.log("Clicked OK on corresponding Salary Plan Warning Message");
                 document.getElementById("#ICOK").click();
 
-            }else if (checkIframeAndClass("popupText","<br>Warning -- Probation Date must be later than H",false)) {
+            }if (checkIframeAndClass("popupText","<br>Warning -- Probation Date must be later than H",false)) {
                 console.log("Clicked OK on Probation Date Warning");
                 document.getElementById("#ICOK").click();
 
