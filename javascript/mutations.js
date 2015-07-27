@@ -284,6 +284,11 @@ function bodyObserver_updatePositions (mutations, bodyObserver) {
                 console.log("Clicked OK on corresponding Church Service warning");
                 document.getElementById("#ICOK").click();
 
+                // Call the returnToSearch() function after the call stack clears.
+                setTimeout(function(){
+                    returnToSearch();
+                });
+
             }else if (checkIframeAndClass("popupText","<br>Warning -- Probation Date must be later than H",false)) {
                 console.log("Clicked OK on Probation Date Warning");
                 document.getElementById("#ICOK").click();
@@ -315,29 +320,37 @@ function iframeObserver_updatePositions (mutations, iframeObserver) {
                 // Disconnect the iframeObserver
                 iframeObserver.disconnect();
 
-                // Return to search
-                document.getElementById("pthnavbccrefanc_HC_POSITION_DATA_GBL5").click();
+                // Call the returnToSearch() function after the call stack clears.
+                setTimeout(function(){
+                    returnToSearch();
+                });
 
-
-                // If the search field shows up and this code is still running the link didn't initiate a page reload
-                var lookingForSearchNode = setInterval(function(){
-
-                    // Set the iframe variable
-                    var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
-
-                    if (!!psIframe.getElementById("EMPLMT_SRCH_COR_EMPLID")) {
-                        console.log("Called pageReady manually");
-
-                        clearInterval(lookingForSearchNode);
-
-                        // Call pageReady()
-                        pageReady();
-                    };
-                },700);
                 return;
             }
         }
     }
+}
+
+function returnToSearch() {
+
+    // Return to search
+    document.getElementById("pthnavbccrefanc_HC_POSITION_DATA_GBL5").click();
+
+    // If the search field shows up and this code is still running the link didn't initiate a page reload
+    var lookingForSearchNode = setInterval(function() {
+
+        // Set the iframe variable
+        var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+
+        if (!!psIframe.getElementById("EMPLMT_SRCH_COR_EMPLID")) {
+            console.log("Called pageReady manually");
+
+            clearInterval(lookingForSearchNode);
+
+            // Call pageReady()
+            pageReady();
+        };
+    }, 700);
 }
 
 function bodyObserver_openJobData(mutations, bodyObserver){
