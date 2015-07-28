@@ -63,6 +63,29 @@ document.addEventListener('DOMContentLoaded', function() {
                     nodeParent.removeChild(document.getElementById(hideIDs[i]));
                 };
             }
+
+            // Add TaskProfile Auto Generation when on TaskProfileID page
+            chrome.tabs.query({
+                active: true,
+                lastFocusedWindow: true
+            }, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    scriptAction: "taskProfilePage"
+                }, function(response) {
+                    if (response.taskProfilePage === "true") {
+                        var taskProfileButton = document.createElement('button');
+                        taskProfileButton.className = "nav";
+                        taskProfileButton.id = "generateTPID";
+                        taskProfileButton.innerHTML = "Create TP ID 002";
+
+                        document.getElementById('main').appendChild(taskProfileButton);
+
+                        document.querySelector("#generateTPID").addEventListener("click", sendTaskProfileID, false);
+
+                    }
+                });
+            });
+
         });
     });
 
@@ -110,6 +133,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }, function(response) {});
     });
 });
+
+function sendTaskProfileID() {
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {scriptAction:"taskProfileID"}, function(response) {});
+    });
+    window.close();
+}
 
 function insertEmpID(e) {
 

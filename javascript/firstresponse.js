@@ -38,6 +38,32 @@ chrome.runtime.onMessage.addListener (
 			return;
         };
 
+        // Check for the taskProfileID page and return true/false
+        if (request.scriptAction === "taskProfileID") {
+            createTPID();
+            return;
+        }
+
+        if (request.scriptAction === "taskProfilePage") {
+
+            if (!!document.getElementById("ptifrmtgtframe")) {
+
+                // Set the iframe variable
+                var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
+                localStorage.onPage = false;
+
+                if (psIframe.getElementById('TL_TSKPRF_TASK_PROFILE_ID') && psIframe.getElementById('TL_TSKPRF_TASK_PROFILE_ID').tagName === 'SPAN') {
+                    console.log('On taskProfileID page');
+                    localStorage.onPage = true;
+                }
+            }
+
+            sendResponse({taskProfilePage: localStorage.onPage});
+            localStorage.clear();
+			return;
+
+        };
+
 
 		 // Return the environment variable if requested
 	  	if (request.scriptAction === "getSystem") {
