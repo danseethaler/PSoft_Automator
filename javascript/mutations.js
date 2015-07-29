@@ -317,10 +317,6 @@ function bodyObserver_updatePositions(mutations, bodyObserver) {
                 console.log("Clicked OK on Probation Date Warning");
                 document.getElementById("#ICOK").click();
 
-            } else if (checkIframeAndClass("popupText", "<br>Warning -- Position ' + JSON.parse(localStorage.thisPosition).dataPoint + ' has over 84 subor", false)) {
-                console.log("Clicked OK on the over 84 subordinates warning");
-                document.getElementById("#ICOK").click();
-
             } else {
 
                 if (!!document.getElementsByClassName("popupText")[1]) {
@@ -361,6 +357,21 @@ function returnToSearch() {
 
     // Return to search
     document.getElementById("pthnavbccrefanc_HC_POSITION_DATA_GBL5").click();
+
+    var extraMessage = setInterval(function() {
+
+      if (!!document.getElementById('ptpopupmsgbtn1')) {
+        document.getElementById('ptpopupmsgbtn1').click();
+      }
+
+      if (checkIframeAndClass("popupText", '<br>Warning -- Position ' + JSON.parse(localStorage.thisPosition).dataPoint + ' has over 84 subor', false)) {
+        console.log("Clicked OK on the over 84 subordinates warning");
+        document.getElementById("#ICOK").click();
+
+        clearInterval(extraMessage);
+
+      }
+    },500)
 
     // If the search field shows up and this code is still running the link didn't initiate a page reload
     var lookingForSearchNode = setInterval(function() {

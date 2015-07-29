@@ -1058,7 +1058,7 @@ function addNewPositionRow() {
         var thisPosition = JSON.parse(localStorage.thisPosition)
         thisPosition.effectiveDate = month + '/' + day +'/' + year;
         localStorage.thisPosition = JSON.stringify(thisPosition);
-debugger;
+
         // Make sure the plus button exists and click it
         if (!!psIframe.getElementById("$ICField3$new$0$$0")) {
             clearInterval(waitForPositionData);
