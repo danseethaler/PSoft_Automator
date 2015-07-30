@@ -783,7 +783,7 @@ function searchRefreshEmployees() {
 
                 console.log("Refrehes processed. Displaying quickMessage");
 
-                quickMessage("Refreshes processing complete.");
+                quickMessage("Refreshes Processing Complete.");
 
                 return;
             }
@@ -959,6 +959,8 @@ function refreshPosition(modalID) {
                         setTimeout(function() {
                             // Select the first search result
                             psIframe.getElementById("#ICSave").click();
+                            
+                            console.log("Save Button Clicked");
 
                             startMutationWatchingIframe();
                             startMutationWatchingBody();

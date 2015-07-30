@@ -250,8 +250,8 @@ function iframeObserver_refreshEmployees(mutations, iframeObserver) {
             var psIframe = document.getElementById("ptifrmtgtframe").contentDocument;
 
             // If the style of the SAVED_win0 === block --> the page has been saved
-            if (psIframe.getElementById("SAVED_win0").style.display === "block" && psIframe.getElementById("ptStatusText_win0").innerHTML === "Saved") {
-
+            if (psIframe.getElementById("SAVED_win0").style.display === "none" && psIframe.getElementById("ptStatusText_win0").innerHTML === "Saved") {
+              console.log("Checking for the page to be saved");
                 // Disconnect the iframeObserver
                 iframeObserver.disconnect();
 
