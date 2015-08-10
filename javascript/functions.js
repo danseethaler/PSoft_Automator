@@ -14,6 +14,7 @@ function checkIframeAndID(nodeID, nodeAction, nodeValue) {
             case "setValue":
                 if (nodeValue !== "undefined") {
                     document.getElementById("ptifrmtgtframe").contentDocument.getElementById(nodeID).value = nodeValue;
+
                 } else {
                     return false;
                 }
@@ -378,6 +379,7 @@ function searchPage() {
     };
 
     // Check for the searchFieldID to exist
+
     var continueSearch = checkIframeAndID(localStorage.searchFieldID, 'setValue', localStorage.searchValue);
 
     // Set second searchFieldValue for off-cycle checks
@@ -1040,11 +1042,11 @@ function addNewPositionRow() {
 
         // Get the effective date of the most recent row
         var currentEffDate = psIframe.getElementById("POSITION_DATA_EFFDT$0").value.split("/");
-        currentEffDate = new Date(currentEffDate[2],Number(currentEffDate[0])-1,currentEffDate[1]);
+        currentEffDate = new Date(currentEffDate[2], Number(currentEffDate[0]) - 1, currentEffDate[1]);
 
         // Create date value for new effective date
         var newEffDate = JSON.parse(localStorage.thisPosition).effectiveDate.split('/');
-        newEffDate = new Date(newEffDate[2],Number(newEffDate[0])-1,newEffDate[1]);
+        newEffDate = new Date(newEffDate[2], Number(newEffDate[0]) - 1, newEffDate[1]);
 
         // See if that date is greater than or equal to the new effective date
         if (currentEffDate >= newEffDate) {
@@ -1056,9 +1058,9 @@ function addNewPositionRow() {
         year = newEffDate.getFullYear();
 
         var thisPosition = JSON.parse(localStorage.thisPosition)
-        thisPosition.effectiveDate = month + '/' + day +'/' + year;
+        thisPosition.effectiveDate = month + '/' + day + '/' + year;
         localStorage.thisPosition = JSON.stringify(thisPosition);
-debugger;
+
         // Make sure the plus button exists and click it
         if (!!psIframe.getElementById("$ICField3$new$0$$0")) {
             clearInterval(waitForPositionData);
@@ -1493,15 +1495,15 @@ function createTPID() {
     psIframe.getElementById("AMT$0").dispatchEvent(changeEvent);
     psIframe.querySelector("#PTGRIDTAB > table > tbody > tr > td:nth-child(2) > a").click();
 
-    setTimeout(function(){
+    setTimeout(function() {
         psIframe.getElementById("BUSINESS_UNIT$0").value = "STDTL";
         psIframe.getElementById("BUSINESS_UNIT$0").dispatchEvent(changeEvent);
-        psIframe.getElementById("DEPTID$0").value = psIframe.getElementById("TL_TSKPRF_TASK_PROFILE_ID").innerHTML.substring(0,7);
+        psIframe.getElementById("DEPTID$0").value = psIframe.getElementById("TL_TSKPRF_TASK_PROFILE_ID").innerHTML.substring(0, 7);
         psIframe.getElementById("DEPTID$0").dispatchEvent(changeEvent);
         psIframe.getElementById("CUSTOMER$0").value = "5025";
         psIframe.getElementById("CUSTOMER$0").dispatchEvent(changeEvent);
         psIframe.getElementById("#ICSave").click();
-    },800);
+    }, 800);
 }
 
 function quickMessage(message, buttonText) {
@@ -1840,7 +1842,6 @@ function createSearchCriteriaObj() {
         },
         "openTaskProfile": {
             "searchFieldID": "TL_TSKPRF_TASK_PROFILE_ID",
-            "searchValue": localStorage.taskgroup,
             "searchButtonID": "#ICSearch"
         },
         "openGroupLists": {
@@ -1869,6 +1870,12 @@ function createSearchCriteriaObj() {
             "searchButtonID": "#ICSearch"
         }
     };
+    
+    if (localStorage.taskgroup !== undefined) {
+        localStorage.searchValue = localStorage.taskgroup;
+    } else if (localStorage.taskProfileID !== undefined) {
+        localStorage.searchValue = localStorage.taskProfileID;
+    }
 
     return searchCriteriaObj;
 }

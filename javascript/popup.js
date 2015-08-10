@@ -267,13 +267,19 @@ function sendAction(e) {
                     requestObject.taskgroup = getEmpidFromClipboard("taskgroup");
                 }
 
-            } else if (e.target.id === "openAddUpdatePosition") {
+            }else if (e.target.id === "openAddUpdatePosition") {
                 if (!!getEmpidFromClipboard("position")) {
                     requestObject.positionNumber = getEmpidFromClipboard("position");
                 }
 
             } else if (!!getEmpidFromClipboard("empid")) {
                 requestObject.empid = getEmpidFromClipboard("empid");
+            }
+
+            if (e.target.id === "openTaskProfile") {
+                if (!!getEmpidFromClipboard("taskProfileID")) {
+                    requestObject.taskProfileID = getEmpidFromClipboard("taskProfileID");
+                }
             }
 
             chrome.tabs.query({
@@ -977,6 +983,13 @@ function getEmpidFromClipboard(cbValue) {
 
     } else if (cbValue === "taskgroup") {
         if (/^\d+$/.test(clipboardData) && (clipboardData.length === 7)) {
+            return clipboardData;
+        } else {
+            return false;
+        }
+
+    } else if (cbValue === "taskProfileID") {
+        if (/^\d+$/.test(clipboardData) && (clipboardData.length === 10)) {
             return clipboardData;
         } else {
             return false;
