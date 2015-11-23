@@ -1044,11 +1044,11 @@ function addNewPositionRow() {
 
         // Get the effective date of the most recent row
         var currentEffDate = psIframe.getElementById("POSITION_DATA_EFFDT$0").value.split("/");
-        currentEffDate = new Date(currentEffDate[2],Number(currentEffDate[0])-1,currentEffDate[1]);
+        currentEffDate = new Date(currentEffDate[2], Number(currentEffDate[0]) - 1, currentEffDate[1]);
 
         // Create date value for new effective date
         var newEffDate = JSON.parse(localStorage.thisPosition).effectiveDate.split('/');
-        newEffDate = new Date(newEffDate[2],Number(newEffDate[0])-1,newEffDate[1]);
+        newEffDate = new Date(newEffDate[2], Number(newEffDate[0]) - 1, newEffDate[1]);
 
         // See if that date is greater than or equal to the new effective date
         if (currentEffDate >= newEffDate) {
@@ -1060,7 +1060,7 @@ function addNewPositionRow() {
         year = newEffDate.getFullYear();
 
         var thisPosition = JSON.parse(localStorage.thisPosition)
-        thisPosition.effectiveDate = month + '/' + day +'/' + year;
+        thisPosition.effectiveDate = month + '/' + day + '/' + year;
         localStorage.thisPosition = JSON.stringify(thisPosition);
 
         // Make sure the plus button exists and click it
@@ -1142,12 +1142,14 @@ function updateDataPoint() {
                 psIframe.getElementById('POSITION_DATA_MAIL_DROP$0').value = "";
                 psIframe.getElementById("POSITION_DATA_MAIL_DROP$0").dispatchEvent(changeEvent);
 
-        // Click save
-        psIframe.getElementById("#ICSave").click();
+                // Click save
+                psIframe.getElementById("#ICSave").click();
 
-        startMutationWatchingIframe();
-        startMutationWatchingBody();
+                startMutationWatchingIframe();
+                startMutationWatchingBody();
 
+            }
+        }, 500)
     }
 
     if (reasonCode === "XFR") {
