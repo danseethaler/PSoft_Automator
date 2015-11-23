@@ -783,7 +783,7 @@ function searchRefreshEmployees() {
 
                 console.log("Refrehes processed. Displaying quickMessage");
 
-                quickMessage("Refreshes Processing Complete.");
+                quickMessage("Refreshes processing complete.");
 
                 return;
             }
@@ -804,7 +804,9 @@ function searchRefreshEmployees() {
 
     // Enter the ID number, EmplRcd and click search
     psIframe.getElementById("EMPLMT_SRCH_COR_EMPLID").value = JSON.parse(localStorage.thisRefresh).empid;
+    console.log("Adding emplid to search");
     psIframe.getElementById("EMPLMT_SRCH_COR_EMPL_RCD").value = JSON.parse(localStorage.thisRefresh).emplRcd;
+    console.log("Adding empl rcd to search");
     psIframe.getElementById("#ICSearch").click();
 
     console.log("Calling addNewRowRefresh");
@@ -959,8 +961,8 @@ function refreshPosition(modalID) {
                         setTimeout(function() {
                             // Select the first search result
                             psIframe.getElementById("#ICSave").click();
-                            
-                            console.log("Save Button Clicked");
+
+                            console.log("Save button clicked");
 
                             startMutationWatchingIframe();
                             startMutationWatchingBody();
@@ -1127,8 +1129,18 @@ function updateDataPoint() {
 
     // Update Reports To Field
     if (reasonCode === "UPD") {
-        psIframe.getElementById('POSITION_DATA_REPORTS_TO$0').value = dataPoint;
-        psIframe.getElementById("POSITION_DATA_REPORTS_TO$0").dispatchEvent(changeEvent);
+
+        // Navigate to the Specific Information tab
+        psIframe.querySelector("[name='#ICPanel1']").click()
+
+        var waitForPage = setInterval(function() {
+            if (!!psIframe.getElementById('POSITION_DATA_MAIL_DROP$0')) {
+
+                clearInterval(waitForPage);
+
+                // Set the Mail Drop ID field
+                psIframe.getElementById('POSITION_DATA_MAIL_DROP$0').value = "";
+                psIframe.getElementById("POSITION_DATA_MAIL_DROP$0").dispatchEvent(changeEvent);
 
         // Click save
         psIframe.getElementById("#ICSave").click();
@@ -1228,6 +1240,7 @@ function searchTerminateEmployees() {
     // Enter the ID number, EmplRcd and click search
     psIframe.getElementById("EMPLMT_SRCH_COR_EMPLID").value = JSON.parse(localStorage.thisTermination).empid;
     psIframe.getElementById("EMPLMT_SRCH_COR_EMPL_RCD").value = JSON.parse(localStorage.thisTermination).emplRcd;
+    console.log("Clicking Search")
     psIframe.getElementById("#ICSearch").click();
 
     console.log("Calling addNewRow");
@@ -1312,7 +1325,7 @@ function setRehireData() {
 
             clearInterval(waitingForRehireData);
 
-            // Click the Yes radio button on eligible for rehire
+            // Click the No radio button on eligible for rehire
             psIframe.getElementById("C_EMPLOYMENT_C_SUITABLE_FOR_REH").click()
 
             // Click save
